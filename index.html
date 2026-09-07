@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#1a1a2e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>For Shaalu 💕</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rose-gold: #e8b4b8;
+  --rose-gold-deep: #c98b8f;
+  --pastel-sky: #d4e5f7;
+  --pastel-sky-light: #e8f0fa;
+  --warm-slate: #2d3436;
+  --warm-slate-light: #4a5568;
+  --cream: #faf5f0;
+  --cream-dark: #f0ebe3;
+  --gold: #d4af37;
+  --glass-bg: rgba(255, 255, 255, 0.15);
+  --glass-border: rgba(255, 255, 255, 0.25);
+  --glass-shadow: rgba(0, 0, 0, 0.1);
+  --text-primary: #2d3436;
+  --text-secondary: #636e72;
+  --text-light: rgba(255, 255, 255, 0.9);
+  --spacing-unit: 8px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  font-size: 16px;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #2d3436 50%, #1a1a2e 100%);
+  color: var(--text-primary);
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   SCREENS SYSTEM
+   ============================================ */
+.screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              visibility 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.screen.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.screen-content {
+  width: 100%;
+  max-width: 100%;
+  padding: calc(var(--spacing-unit) * 3);
+  padding-top: max(calc(var(--spacing-unit) * 4), env(safe-area-inset-top));
+  padding-bottom: max(calc(var(--spacing-unit) * 4), env(safe-area-inset-bottom));
+}
+
+/* ============================================
+   LOCK SCREEN
+   ============================================ */
+#lock-screen {
+  background: linear-gradient(180deg, #1a1a2e 0%, #2d3436 100%);
+}
+
+.lock-screen-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 4);
+}
+
+.lock-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.75rem, 8vw, 3rem);
+  font-weight: 400;
+  color: var(--cream);
+  letter-spacing: 0.05em;
+  margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+.dial-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: calc(var(--spacing-unit) * 1.5);
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+.dial-btn {
+  width: clamp(60px, 20vw, 80px);
+  height: clamp(60px, 20vw, 80px);
+  min-height: 48px;
+  min-width: 48px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--cream);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.25rem, 5vw, 1.75rem);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.dial-btn:active {
+  transform: scale(0.92);
+  background: rgba(255, 255, 255, 0.25);
+  border-color: var(--rose-gold);
+  box-shadow: 0 0 20px rgba(232, 180, 184, 0.4);
+}
+
+.dial-btn.error {
+  animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  border-color: #e74c3c;
+  background: rgba(231, 76, 60, 0.2);
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+
+.pin-display {
+  display: flex;
+  gap: calc(var(--spacing-unit) * 2);
+  justify-content: center;
+  margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+.pin-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.pin-dot.filled {
+  background: var(--rose-gold);
+  border-color: var(--rose-gold);
+  box-shadow: 0 0 12px rgba(232, 180, 184, 0.5);
+}
+
+.pin-dot.error {
+  border-color: #e74c3c;
+  background: #e74c3c;
+}
+
+/* ============================================
+   HEADPHONE GATE
+   ============================================ */
+#headphone-gate {
+  background: linear-gradient(135deg, #2d3436 0%, #1a1a2e 100%);
+}
+
+.headphone-gate-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 3);
+  max-width: 340px;
+}
+
+.headphone-icon {
+  width: 80px;
+  height: 80px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+.headphone-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--rose-gold);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.gate-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.5rem, 6vw, 2.25rem);
+  font-weight: 400;
+  color: var(--cream);
+  line-height: 1.3;
+}
+
+.gate-subtitle {
+  font-size: clamp(0.875rem, 3.5vw, 1rem);
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 40px;
+  min-height: 48px;
+  min-width: 48px;
+  border: none;
+  border-radius: 50px;
+  background: linear-gradient(135deg, var(--rose-gold) 0%, var(--rose-gold-deep) 100%);
+  color: var(--cream);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(232, 180, 184, 0.3);
+  outline: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.cta-button:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 10px rgba(232, 180, 184, 0.5);
+}
+
+.cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(232, 180, 184, 0.4);
+}
+
+/* ============================================
+   PROLOGUE SCREEN
+   ============================================ */
+#prologue {
+  background: linear-gradient(180deg, #1a1a2e 0%, #2d3436 50%, #1a1a2e 100%);
+}
+
+.prologue-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  gap: calc(var(--spacing-unit) * 3);
+  padding-top: max(calc(var(--spacing-unit) * 8), env(safe-area-inset-top));
+}
+
+.prologue-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.5rem, 10vw, 4.5rem);
+  font-weight: 300;
+  color: var(--cream);
+  font-style: italic;
+  line-height: 1.2;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 1s ease forwards 0.3s;
+}
+
+.prologue-subheading {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1rem, 4vw, 1.5rem);
+  color: var(--rose-gold);
+  font-weight: 400;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s ease forwards 0.6s;
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: calc(var(--spacing-unit) * 6);
+  left: 50%;
+  transform: translateX(-50%);
+  animation: bounce 2s infinite;
+  opacity: 0;
+  animation: bounce 2s infinite 1.2s, fadeIn 1s ease 1.2s forwards;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(10px); }
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.scroll-indicator svg {
+  width: 32px;
+  height: 32px;
+  stroke: var(--cream);
+  stroke-width: 1.5;
+  fill: none;
+  opacity: 0.7;
+}
+
+.start-button {
+  margin-top: calc(var(--spacing-unit) * 4);
+  opacity: 0;
+  animation: fadeInUp 1s ease forwards 1.5s;
+}
+
+/* ============================================
+   TIMELINE SCREEN
+   ============================================ */
+#timeline {
+  background: linear-gradient(180deg, #1a1a2e 0%, #2d3436 100%);
+  justify-content: flex-start;
+  padding-top: max(calc(var(--spacing-unit) * 6), env(safe-area-inset-top));
+}
+
+.timeline-header {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.75rem, 7vw, 2.5rem);
+  font-weight: 400;
+  color: var(--cream);
+  text-align: center;
+  margin-bottom: calc(var(--spacing-unit) * 4);
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.timeline.active .timeline-header {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+}
+
+.timeline-container {
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+  padding: calc(var(--spacing-unit) * 2) 0;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 20px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, var(--rose-gold) 0%, var(--pastel-sky) 50%, var(--rose-gold) 100%);
+  opacity: 0.4;
+}
+
+.timeline-item {
+  position: relative;
+  padding-left: 60px;
+  padding-bottom: calc(var(--spacing-unit) * 3);
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.timeline-item.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.timeline-node {
+  position: absolute;
+  left: 12px;
+  top: 4px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--cream);
+  box-shadow: 0 0 0 4px rgba(232, 180, 184, 0.3),
+              0 0 20px rgba(232, 180, 184, 0.5);
+  animation: pulse-node 2s infinite;
+}
+
+@keyframes pulse-node {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(232, 180, 184, 0.3), 0 0 20px rgba(232, 180, 184, 0.5); }
+  50% { box-shadow: 0 0 0 8px rgba(232, 180, 184, 0.1), 0 0 30px rgba(232, 180, 184, 0.7); }
+}
+
+.timeline-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: calc(var(--spacing-unit) * 2);
+  box-shadow: 0 8px 32px var(--glass-shadow);
+  transition: all 0.3s ease;
+}
+
+.timeline-card:active {
+  transform: scale(0.98);
+}
+
+.timeline-number {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.875rem;
+  color: var(--rose-gold);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.timeline-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1rem, 4vw, 1.25rem);
+  font-weight: 500;
+  color: var(--cream);
+  margin-bottom: 4px;
+}
+
+.timeline-desc {
+  font-size: clamp(0.875rem, 3.5vw, 1rem);
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+/* ============================================
+   GALLERY SCREEN
+   ============================================ */
+#gallery {
+  background: linear-gradient(180deg, #1a1a2e 0%, #2d3436 100%);
+  justify-content: flex-start;
+  padding-top: max(calc(var(--spacing-unit) * 6), env(safe-area-inset-top));
+}
+
+.gallery-header {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.75rem, 7vw, 2.5rem);
+  font-weight: 400;
+  color: var(--cream);
+  text-align: center;
+  margin-bottom: calc(var(--spacing-unit) * 4);
+  opacity: 0;
+}
+
+.gallery.active .gallery-header {
+  opacity: 1;
+  transition: opacity 0.8s ease 0.2s;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: calc(var(--spacing-unit) * 1.5);
+  width: 100%;
+  max-width: 600px;
+}
+
+.gallery-item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gallery-item.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.gallery-item:hover img,
+.gallery-item:active img {
+  transform: scale(1.05);
+}
+
+.gallery-item-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(0, 0, 0, 0.4) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.gallery-item:hover .gallery-item-overlay,
+.gallery-item:active .gallery-item-overlay {
+  opacity: 1;
+}
+
+/* Lightbox */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.lightbox.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.lightbox img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: calc(env(safe-area-inset-top) + 16px);
+  right: 16px;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.lightbox-close:active {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ============================================
+   LETTER SCREEN
+   ============================================ */
+#letter {
+  background: linear-gradient(180deg, #1a1a2e 0%, #2d3436 100%);
+  justify-content: flex-start;
+  padding-top: max(calc(var(--spacing-unit) * 6), env(safe-area-inset-top));
+}
+
+.letter-header {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.75rem, 7vw, 2.5rem);
+  font-weight: 400;
+  color: var(--cream);
+  text-align: center;
+  margin-bottom: calc(var(--spacing-unit) * 4);
+  opacity: 0;
+}
+
+.letter.active .letter-header {
+  opacity: 1;
+  transition: opacity 0.8s ease 0.2s;
+}
+
+.letter-content {
+  max-width: 600px;
+  width: 100%;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: calc(var(--spacing-unit) * 3);
+  box-shadow: 0 8px 32px var(--glass-shadow);
+}
+
+.letter-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1rem, 4vw, 1.25rem);
+  color: var(--cream);
+  line-height: 1.8;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.heartbeat-container {
+  display: flex;
+  justify-content: center;
+  margin-top: calc(var(--spacing-unit) * 3);
+}
+
+.heartbeat {
+  width: 60px;
+  height: 60px;
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  10% { transform: scale(1.15); }
+  20% { transform: scale(1); }
+  30% { transform: scale(1.1); }
+  40%, 100% { transform: scale(1); }
+}
+
+.heartbeat svg {
+  width: 100%;
+  height: 100%;
+  fill: var(--rose-gold);
+  filter: drop-shadow(0 0 10px rgba(232, 180, 184, 0.6));
+}
+
+/* ============================================
+   QUESTION SCREEN (Proposal)
+   ============================================ */
+#question {
+  background: linear-gradient(180deg, #1a1a2e 0%, #2d3436 50%, #1a1a2e 100%);
+}
+
+.question-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--spacing-unit) * 3);
+  max-width: 400px;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#question.active .question-content {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.question-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.75rem, 7vw, 2.75rem);
+  font-weight: 400;
+  color: var(--cream);
+  line-height: 1.3;
+}
+
+.question-subheading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1rem, 4vw, 1.25rem);
+  color: var(--rose-gold);
+  line-height: 1.6;
+  font-style: italic;
+  font-weight: 300;
+}
+
+.question-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-unit) * 2);
+  margin-top: calc(var(--spacing-unit) * 3);
+  width: 100%;
+  max-width: 280px;
+}
+
+.question-btn {
+  width: 100%;
+  padding: 18px 32px;
+  font-size: 1.1rem;
+}
+
+.question-btn.secondary {
+  background: transparent;
+  border: 2px solid var(--rose-gold);
+  color: var(--rose-gold);
+  box-shadow: none;
+}
+
+.question-btn.secondary:active {
+  background: rgba(232, 180, 184, 0.1);
+}
+
+/* ============================================
+   CELEBRATION SCREEN
+   ============================================ */
+#celebration {
+  background: linear-gradient(135deg, #1a1a2e 0%, #c98b8f 50%, #1a1a2e 100%);
+  overflow: hidden;
+}
+
+.celebration-content {
+  text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  gap: calc(var(--spacing-unit) * 2);
+}
+
+.celebration-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.5rem, 10vw, 4.5rem);
+  font-weight: 500;
+  color: var(--cream);
+  line-height: 1.2;
+  opacity: 0;
+  transform: scale(0.5);
+  animation: celebrationPop 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  text-shadow: 0 0 40px rgba(232, 180, 184, 0.6);
+}
+
+.celebration-subheading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.25rem, 5vw, 2rem);
+  color: var(--cream);
+  font-style: italic;
+  font-weight: 300;
+  opacity: 0;
+  animation: fadeInUp 1s ease forwards 0.8s;
+}
+
+.celebration-big-heart {
+  margin-top: calc(var(--spacing-unit) * 4);
+  width: 100px;
+  height: 100px;
+  opacity: 0;
+  animation: celebrationPop 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards 0.4s;
+}
+
+.celebration-big-heart svg {
+  width: 100%;
+  height: 100%;
+  fill: var(--rose-gold);
+  filter: drop-shadow(0 0 30px rgba(232, 180, 184, 0.8));
+  animation: heartbeat 1.2s ease-in-out infinite 1.5s;
+}
+
+@keyframes celebrationPop {
+  0% { opacity: 0; transform: scale(0.5); }
+  60% { opacity: 1; transform: scale(1.1); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.celebration-hearts {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.floating-heart {
+  position: absolute;
+  fill: var(--rose-gold);
+  opacity: 0;
+  filter: drop-shadow(0 0 10px rgba(232, 180, 184, 0.5));
+}
+
+.floating-heart.h1 { width: 32px; height: 32px; left: 10%; bottom: -50px; animation: floatUp 4s ease-out 0.2s forwards; }
+.floating-heart.h2 { width: 24px; height: 24px; left: 25%; bottom: -50px; animation: floatUp 5s ease-out 0.6s forwards; }
+.floating-heart.h3 { width: 28px; height: 28px; left: 50%; bottom: -50px; animation: floatUp 4.5s ease-out 0.4s forwards; }
+.floating-heart.h4 { width: 20px; height: 20px; left: 70%; bottom: -50px; animation: floatUp 5.5s ease-out 0.8s forwards; }
+.floating-heart.h5 { width: 30px; height: 30px; left: 85%; bottom: -50px; animation: floatUp 4.2s ease-out 0.3s forwards; }
+.floating-heart.h6 { width: 22px; height: 22px; left: 40%; bottom: -50px; animation: floatUp 5.2s ease-out 1s forwards; }
+
+@keyframes floatUp {
+  0% { opacity: 0; transform: translateY(0) rotate(0deg); }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-110vh) rotate(360deg); }
+}
+
+/* ============================================
+   BOKEH PARTICLES CANVAS
+   ============================================ */
+#bokeh-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ============================================
+   BUTTERFLIES SVG
+   ============================================ */
+.butterfly-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.butterfly {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  opacity: 0.4;
+  animation: butterfly-float linear infinite;
+}
+
+@keyframes butterfly-float {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(20px, -30px) rotate(5deg); }
+  50% { transform: translate(-10px, -60px) rotate(-5deg); }
+  75% { transform: translate(30px, -30px) rotate(3deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+/* ============================================
+   FALLBACK CLICK-TO-PLAY OVERLAY
+   ============================================ */
+#audio-fallback {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+#audio-fallback.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.fallback-content {
+  text-align: center;
+  padding: calc(var(--spacing-unit) * 4);
+}
+
+.fallback-content p {
+  color: var(--cream);
+  font-size: 1rem;
+  margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+/* ============================================
+   UTILITIES
+   ============================================ */
+.hidden { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Desktop enhancements */
+@media (min-width: 768px) {
+  .gallery-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: calc(var(--spacing-unit) * 2);
+  }
+
+  .timeline-container {
+    max-width: 700px;
+  }
+
+  .letter-content {
+    padding: calc(var(--spacing-unit) * 4);
+  }
+}
+
+/* Desktop glassmorphism enhancement */
+@media (min-width: 1024px) {
+  .screen-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Bokeh Particles Canvas -->
+<canvas id="bokeh-canvas"></canvas>
+
+<!-- Floating Butterflies -->
+<div class="butterfly-container" id="butterflies" aria-hidden="true"></div>
+
+<!-- Audio Elements -->
+<audio id="bgm" preload="auto" loop>
+  <source src="audio/bgm.mp3" type="audio/mpeg">
+</audio>
+<audio id="celebrate" preload="auto">
+  <source src="audio/celebrate.mp3" type="audio/mpeg">
+</audio>
+<audio id="yes-to-play" preload="auto">
+  <source src="audio/yes-to-play.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Fallback Click-to-Play Overlay -->
+<div id="audio-fallback" role="dialog" aria-label="Audio playback required">
+  <div class="fallback-content">
+    <p>Please tap to enable audio</p>
+    <button class="cta-button" id="fallback-btn">Tap to Play</button>
+  </div>
+</div>
+
+<!-- Screen 0: Lock Screen -->
+<section id="lock-screen" class="screen active" aria-label="Lock Screen">
+  <div class="screen-content">
+    <div class="lock-screen-content">
+      <h1 class="lock-title">For Shaalu</h1>
+      <div class="pin-display" id="pin-display" aria-label="PIN entry indicator">
+        <div class="pin-dot" data-index="0"></div>
+        <div class="pin-dot" data-index="1"></div>
+        <div class="pin-dot" data-index="2"></div>
+        <div class="pin-dot" data-index="3"></div>
+      </div>
+      <div class="dial-pad" id="dial-pad" role="group" aria-label="PIN keypad">
+        <button class="dial-btn" data-value="1" aria-label="1">1</button>
+        <button class="dial-btn" data-value="2" aria-label="2">2</button>
+        <button class="dial-btn" data-value="3" aria-label="3">3</button>
+        <button class="dial-btn" data-value="4" aria-label="4">4</button>
+        <button class="dial-btn" data-value="5" aria-label="5">5</button>
+        <button class="dial-btn" data-value="6" aria-label="6">6</button>
+        <button class="dial-btn" data-value="7" aria-label="7">7</button>
+        <button class="dial-btn" data-value="8" aria-label="8">8</button>
+        <button class="dial-btn" data-value="9" aria-label="9">9</button>
+        <button class="dial-btn" data-value="" disabled aria-hidden="true"></button>
+        <button class="dial-btn" data-value="0" aria-label="0">0</button>
+        <button class="dial-btn" id="delete-pin" aria-label="Delete">⌫</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Screen 0.5: Headphone Gate -->
+<section id="headphone-gate" class="screen" aria-label="Headphone Gate">
+  <div class="screen-content">
+    <div class="headphone-gate-content">
+      <div class="headphone-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
+          <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>
+        </svg>
+      </div>
+      <h2 class="gate-heading">Please use headphones</h2>
+      <p class="gate-subtitle">Best experienced with sound on. Put them on, take a breath, and take your time.</p>
+      <button class="cta-button" id="continue-btn" aria-label="Continue to experience">
+        Continue ❤
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Screen 1: Prologue -->
+<section id="prologue" class="screen" aria-label="Prologue">
+  <div class="screen-content">
+    <div class="prologue-content">
+      <h1 class="prologue-heading">Hey, you…</h1>
+      <p class="prologue-subheading">A story just for you</p>
+      <div class="scroll-indicator">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 5v14M5 12l7 7 7-7"/>
+        </svg>
+      </div>
+      <button class="cta-button start-button" id="start-btn" aria-label="Start the experience">
+        Start ❤
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Screen 2: Timeline -->
+<section id="timeline" class="screen" aria-label="Timeline">
+  <div class="screen-content">
+    <h2 class="timeline-header">Timeline of Archives</h2>
+    <div class="timeline-container">
+      <div class="timeline-line" aria-hidden="true"></div>
+
+      <article class="timeline-item">
+        <div class="timeline-node" aria-hidden="true"></div>
+        <div class="timeline-card">
+          <div class="timeline-number">Archive I</div>
+          <h3 class="timeline-title">Our First Meeting</h3>
+          <p class="timeline-desc">Kuthuparamba bus stand</p>
+        </div>
+      </article>
+
+      <article class="timeline-item">
+        <div class="timeline-node" aria-hidden="true"></div>
+        <div class="timeline-card">
+          <div class="timeline-number">Archive II</div>
+          <h3 class="timeline-title">Our First Kiss</h3>
+        </div>
+      </article>
+
+      <article class="timeline-item">
+        <div class="timeline-node" aria-hidden="true"></div>
+        <div class="timeline-card">
+          <div class="timeline-number">Archive III</div>
+          <h3 class="timeline-title">Kottayam</h3>
+          <p class="timeline-desc">The journey, the heartbreak, and finding each other back in Bangalore</p>
+        </div>
+      </article>
+
+      <article class="timeline-item">
+        <div class="timeline-node" aria-hidden="true"></div>
+        <div class="timeline-card">
+          <div class="timeline-number">Archive IV</div>
+          <h3 class="timeline-title">Wonderla & Bangalore</h3>
+        </div>
+      </article>
+
+      <article class="timeline-item">
+        <div class="timeline-node" aria-hidden="true"></div>
+        <div class="timeline-card">
+          <div class="timeline-number">Archive V</div>
+          <h3 class="timeline-title">Scooty Rides</h3>
+        </div>
+      </article>
+
+      <article class="timeline-item">
+        <div class="timeline-node" aria-hidden="true"></div>
+        <div class="timeline-card">
+          <div class="timeline-number">Archive VI</div>
+          <h3 class="timeline-title">Amis, Kuthuparamba</h3>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- Screen 3: Gallery -->
+<section id="gallery" class="screen" aria-label="Photo Gallery">
+  <div class="screen-content">
+    <h2 class="gallery-header">Moments</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item" data-img="photos/photo1.jpg" role="button" tabindex="0" aria-label="View photo 1">
+        <img src="photos/photo1.jpg" alt="Memory 1" loading="lazy">
+        <div class="gallery-item-overlay"></div>
+      </div>
+      <div class="gallery-item" data-img="photos/photo2.jpg" role="button" tabindex="0" aria-label="View photo 2">
+        <img src="photos/photo2.jpg" alt="Memory 2" loading="lazy">
+        <div class="gallery-item-overlay"></div>
+      </div>
+      <div class="gallery-item" data-img="photos/photo3.jpg" role="button" tabindex="0" aria-label="View photo 3">
+        <img src="photos/photo3.jpg" alt="Memory 3" loading="lazy">
+        <div class="gallery-item-overlay"></div>
+      </div>
+      <div class="gallery-item" data-img="photos/photo4.jpg" role="button" tabindex="0" aria-label="View photo 4">
+        <img src="photos/photo4.jpg" alt="Memory 4" loading="lazy">
+        <div class="gallery-item-overlay"></div>
+      </div>
+      <div class="gallery-item" data-img="photos/photo5.jpg" role="button" tabindex="0" aria-label="View photo 5">
+        <img src="photos/photo5.jpg" alt="Memory 5" loading="lazy">
+        <div class="gallery-item-overlay"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Screen 4: Letter -->
+<section id="letter" class="screen" aria-label="The Letter">
+  <div class="screen-content">
+    <h2 class="letter-header">A Letter</h2>
+    <div class="letter-content">
+      <p class="letter-text">
+        To my dearest Shaalu,<br><br>
+
+        I want to thank her sister for being part of our story. The watch wallpaper in a Kerala saree — that image stays with me. I wanted a real, authentic story, not just pretty words. This is ours.<br><br>
+
+        Every moment with you is a chapter I cherish. From the bus stand to this screen, you've been my greatest adventure.
+      </p>
+      <div class="heartbeat-container">
+        <div class="heartbeat" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </div>
+      </div>
+      <button class="cta-button" id="continue-to-question" style="margin-top: 32px;">Read on ❤</button>
+    </div>
+  </div>
+</section>
+
+<!-- Screen 5: The Question (Proposal) -->
+<section id="question" class="screen" aria-label="The Question">
+  <div class="screen-content">
+    <div class="question-content">
+      <h2 class="question-heading">So… will you be mine?</h2>
+      <p class="question-subheading">For the buses, the bus stands, the heartbreak, the laughter, and everything after.</p>
+      <div class="question-buttons">
+        <button class="cta-button question-btn" id="yes-btn" aria-label="Yes">
+          YES ❤
+        </button>
+        <button class="cta-button question-btn secondary" id="of-course-btn" aria-label="Of course">
+          Of course 🥹
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Screen 6: Celebration -->
+<section id="celebration" class="screen" aria-label="Celebration">
+  <div class="screen-content">
+    <div class="celebration-content">
+      <h1 class="celebration-heading">You said yes!</h1>
+      <p class="celebration-subheading">My heart is yours. Always.</p>
+      <div class="celebration-hearts" aria-hidden="true">
+        <svg viewBox="0 0 24 24" class="floating-heart h1">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <svg viewBox="0 0 24 24" class="floating-heart h2">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <svg viewBox="0 0 24 24" class="floating-heart h3">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <svg viewBox="0 0 24 24" class="floating-heart h4">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <svg viewBox="0 0 24 24" class="floating-heart h5">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <svg viewBox="0 0 24 24" class="floating-heart h6">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+      </div>
+      <div class="celebration-big-heart">
+        <svg viewBox="0 0 24 24">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" role="dialog" aria-label="Photo viewer">
+  <button class="lightbox-close" id="lightbox-close" aria-label="Close lightbox">✕</button>
+  <img src="" alt="" id="lightbox-img">
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ============================================
+  // DOM ELEMENTS
+  // ============================================
+  const screens = {
+    lock: document.getElementById('lock-screen'),
+    gate: document.getElementById('headphone-gate'),
+    prologue: document.getElementById('prologue'),
+    timeline: document.getElementById('timeline'),
+    gallery: document.getElementById('gallery'),
+    letter: document.getElementById('letter'),
+    question: document.getElementById('question'),
+    celebration: document.getElementById('celebration')
+  };
+
+  const audio = {
+    bgm: document.getElementById('bgm'),
+    celebrate: document.getElementById('celebrate'),
+    yesToPlay: document.getElementById('yes-to-play'),
+    fallback: document.getElementById('audio-fallback')
+  };
+
+  const pinDisplay = document.getElementById('pin-display');
+  const pinDots = pinDisplay.querySelectorAll('.pin-dot');
+  const dialPad = document.getElementById('dial-pad');
+  const deleteBtn = document.getElementById('delete-pin');
+  const continueBtn = document.getElementById('continue-btn');
+  const startBtn = document.getElementById('start-btn');
+  const continueToQuestionBtn = document.getElementById('continue-to-question');
+  const yesBtn = document.getElementById('yes-btn');
+  const ofCourseBtn = document.getElementById('of-course-btn');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const lightboxClose = document.getElementById('lightbox-close');
+  const fallbackBtn = document.getElementById('fallback-btn');
+  const bokehCanvas = document.getElementById('bokeh-canvas');
+  const butterfliesContainer = document.getElementById('butterflies');
+
+  // ============================================
+  // STATE
+  // ============================================
+  const CORRECT_PIN = '0410';
+  let currentPin = '';
+  let audioContext = null;
+  let audioUnlocked = false;
+  let currentScreen = 'lock';
+
+  // ============================================
+  // SCREEN MANAGEMENT
+  // ============================================
+  function showScreen(screenName) {
+    // Hide all screens
+    Object.values(screens).forEach(screen => screen.classList.remove('active'));
+
+    // Show target screen
+    if (screens[screenName]) {
+      screens[screenName].classList.add('active');
+      currentScreen = screenName;
+
+      // Trigger timeline animations
+      if (screenName === 'timeline') {
+        setTimeout(animateTimeline, 100);
+      }
+
+      // Trigger gallery animations
+      if (screenName === 'gallery') {
+        setTimeout(animateGallery, 100);
+      }
+    }
+  }
+
+  function animateTimeline() {
+    const items = document.querySelectorAll('.timeline-item');
+    items.forEach((item, index) => {
+      setTimeout(() => item.classList.add('visible'), index * 150);
+    });
+  }
+
+  function animateGallery() {
+    const items = document.querySelectorAll('.gallery-item');
+    items.forEach((item, index) => {
+      setTimeout(() => item.classList.add('visible'), index * 100);
+    });
+  }
+
+  // Add animation trigger for letter screen
+  if (screenName === 'letter') {
+    screens.letter.classList.add('active');
+  }
+
+  // Add animation trigger for question screen
+  if (screenName === 'question') {
+    setTimeout(() => {
+      const heading = document.querySelector('.question-heading');
+      const subheading = document.querySelector('.question-subheading');
+      const buttons = document.querySelectorAll('.question-btn');
+      if (heading) heading.style.animation = 'fadeInUp 0.8s ease forwards';
+      if (subheading) subheading.style.animation = 'fadeInUp 0.8s ease forwards 0.2s';
+      if (buttons.length) buttons.forEach((btn, index) => {
+        btn.style.animation = `fadeInUp 0.8s ease forwards ${0.4 + (index * 0.1)}s`;
+      });
+    }, 100);
+  }
+
+  // Add animation trigger for celebration screen
+  if (screenName === 'celebration') {
+    const hearts = document.querySelectorAll('.floating-heart');
+    hearts.forEach(heart => { heart.style.animation = 'none'; });
+    setTimeout(() => {
+      document.querySelectorAll('.floating-heart').forEach(heart => {
+        heart.style.animation = `floatUp ${Math.random() * 3 + 3}s ease-out forwards`;
+        heart.style.animationDelay = Math.random() * 2 + 's';
+      });
+    }, 100);
+  }
+
+  // ============================================
+  // PIN ENTRY
+  // ============================================
+  function updatePinDisplay() {
+    pinDots.forEach((dot, index) => {
+      dot.classList.toggle('filled', index < currentPin.length);
+      dot.classList.remove('error');
+    });
+  }
+
+  function shakeLock() {
+    screens.lock.classList.add('error');
+    pinDots.forEach(dot => dot.classList.add('error'));
+    setTimeout(() => {
+      screens.lock.classList.remove('error');
+      pinDots.forEach(dot => dot.classList.remove('error'));
+    }, 500);
+  }
+
+  function handlePinInput(value) {
+    if (currentPin.length < 4) {
+      currentPin += value;
+      updatePinDisplay();
+
+      if (currentPin.length === 4) {
+        if (currentPin === CORRECT_PIN) {
+          // Correct PIN - show headphone gate
+          showScreen('gate');
+        } else {
+          // Wrong PIN
+          shakeLock();
+          currentPin = '';
+          updatePinDisplay();
+        }
+      }
+    }
+  }
+
+  function deletePin() {
+    if (currentPin.length > 0) {
+      currentPin = currentPin.slice(0, -1);
+      updatePinDisplay();
+    }
+  }
+
+  // Dial pad event listeners
+  dialPad.addEventListener('click', (e) => {
+    const btn = e.target.closest('.dial-btn');
+    if (!btn || btn.disabled) return;
+
+    const value = btn.dataset.value;
+    if (value !== undefined && value !== '') {
+      handlePinInput(value);
+    }
+  });
+
+  // Keyboard support for PIN
+  document.addEventListener('keydown', (e) => {
+    if (currentScreen !== 'lock') return;
+
+    if (/^[0-9]$/.test(e.key)) {
+      handlePinInput(e.key);
+    } else if (e.key === 'Backspace') {
+      deletePin();
+    }
+  });
+
+  deleteBtn.addEventListener('click', deletePin);
+
+  // ============================================
+  // AUDIO ENGINE - FIXED FOR MOBILE
+  // ============================================
+
+  // Initialize AudioContext on user interaction
+  async function initAudioContext() {
+    if (audioContext) return audioContext;
+
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      audioContext = new AC();
+
+      // Resume if suspended (this unlocks audio on iOS)
+      if (audioContext.state === 'suspended') {
+        await audioContext.resume();
+      }
+
+      return audioContext;
+    } catch (err) {
+      console.warn('AudioContext init failed:', err);
+      return null;
+    }
+  }
+
+  // Safe audio play with fallback
+  async function safePlay(audioEl, volume = 0.5, loop = false) {
+    try {
+      if (!audioEl) return;
+
+      audioEl.loop = loop;
+      audioEl.volume = volume;
+      audioEl.currentTime = 0;
+
+      // For iOS/Safari, we need the AudioContext to be running
+      await initAudioContext();
+
+      await audioEl.play();
+      console.log('Audio playing successfully');
+    } catch (err) {
+      console.warn('Audio play failed:', err);
+      // Don't show fallback for BGM failures - it's not critical
+    }
+  }
+
+  // Stop audio with fade
+  function safeStop(audioEl, fadeOut = false) {
+    if (!audioEl) return;
+
+    if (fadeOut && audioEl.volume > 0) {
+      const startVolume = audioEl.volume;
+      const fadeStep = startVolume / 20;
+      let currentVolume = startVolume;
+
+      const fadeInterval = setInterval(() => {
+        currentVolume -= fadeStep;
+        if (currentVolume <= 0) {
+          audioEl.pause();
+          audioEl.currentTime = 0;
+          audioEl.volume = startVolume;
+          clearInterval(fadeInterval);
+        } else {
+          audioEl.volume = currentVolume;
+        }
+      }, 50);
+    } else {
+      audioEl.pause();
+      audioEl.currentTime = 0;
+    }
+  }
+
+  // Start BGM
+  async function startBGM() {
+    await safePlay(audio.bgm, 0.4, true);
+  }
+
+  // Play celebration music
+  async function playCelebration() {
+    safeStop(audio.bgm, true);
+    await safePlay(audio.celebrate, 0.9, false);
+  }
+
+  // Play "Yes to Play" music
+  async function playYesToPlay() {
+    safeStop(audio.bgm, true);
+    await safePlay(audio.yesToPlay, 0.9, false);
+  }
+
+  // Headphone gate continue button - THIS IS THE CRITICAL INTERACTION
+  continueBtn.addEventListener('click', async () => {
+    // Initialize audio context on this user gesture
+    await initAudioContext();
+
+    // Try to preload and play briefly to unlock
+    try {
+      audio.bgm.load();
+      audio.yesToPlay.load();
+      audio.celebrate.load();
+    } catch (e) {
+      console.warn('Audio load failed:', e);
+    }
+
+    audioUnlocked = true;
+    showScreen('prologue');
+    startBGM();
+  });
+
+  // Start button from prologue - go to timeline
+  startBtn.addEventListener('click', () => {
+    showScreen('timeline');
+  });
+
+  // Continue to question screen
+  continueToQuestionBtn.addEventListener('click', () => {
+    showScreen('question');
+  });
+
+  // YES button - play celebration music
+  yesBtn.addEventListener('click', async () => {
+    await initAudioContext();
+    playCelebration();
+    showScreen('celebration');
+  });
+
+  // Of course button - play "yes-to-play" music
+  ofCourseBtn.addEventListener('click', async () => {
+    await initAudioContext();
+    playYesToPlay();
+    showScreen('celebration');
+  });
+
+  // ============================================
+  // LIGHTBOX
+  // ============================================
+  function openLightbox(imgSrc) {
+    lightboxImg.src = imgSrc;
+    lightboxImg.alt = 'Expanded photo';
+    lightbox.classList.add('active');
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+  }
+
+  // Gallery item clicks
+  document.querySelectorAll('.gallery-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const imgSrc = item.dataset.img;
+      openLightbox(imgSrc);
+    });
+
+    item.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const imgSrc = item.dataset.img;
+        openLightbox(imgSrc);
+      }
+    });
+  });
+
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  // ============================================
+  // BOKEH PARTICLES
+  // ============================================
+  const bokehCtx = bokehCanvas.getContext('2d');
+  let bokehParticles = [];
+  let bokehAnimating = true;
+
+  function resizeBokeh() {
+    bokehCanvas.width = window.innerWidth;
+    bokehCanvas.height = window.innerHeight;
+  }
+
+  function createBokehParticle() {
+    return {
+      x: Math.random() * bokehCanvas.width,
+      y: Math.random() * bokehCanvas.height,
+      radius: Math.max(1, Math.random() * 4 + 1),
+      opacity: Math.random() * 0.5 + 0.1,
+      speedX: (Math.random() - 0.5) * 0.5,
+      speedY: (Math.random() - 0.5) * 0.5,
+      hue: Math.random() > 0.5 ? 350 : 210 // Rose gold or sky blue
+    };
+  }
+
+  function initBokeh() {
+    resizeBokeh();
+    const count = Math.min(50, Math.floor((bokehCanvas.width * bokehCanvas.height) / 20000));
+    bokehParticles = Array.from({ length: count }, createBokehParticle);
+  }
+
+  function animateBokeh() {
+    if (!bokehAnimating) return;
+
+    bokehCtx.clearRect(0, 0, bokehCanvas.width, bokehCanvas.height);
+
+    bokehParticles.forEach(particle => {
+      particle.x += particle.speedX;
+      particle.y += particle.speedY;
+
+      if (particle.x < -10) particle.x = bokehCanvas.width + 10;
+      if (particle.x > bokehCanvas.width + 10) particle.x = -10;
+      if (particle.y < -10) particle.y = bokehCanvas.height + 10;
+      if (particle.y > bokehCanvas.height + 10) particle.y = -10;
+
+      bokehCtx.beginPath();
+      bokehCtx.arc(particle.x, particle.y, Math.max(0.5, particle.radius), 0, Math.PI * 2);
+      bokehCtx.fillStyle = `hsla(${particle.hue}, 60%, 80%, ${particle.opacity})`;
+      bokehCtx.fill();
+
+      // Glow effect
+      bokehCtx.beginPath();
+      bokehCtx.arc(particle.x, particle.y, Math.max(1, particle.radius * 3), 0, Math.PI * 2);
+      bokehCtx.fillStyle = `hsla(${particle.hue}, 60%, 80%, ${particle.opacity * 0.2})`;
+      bokehCtx.fill();
+    });
+
+    requestAnimationFrame(animateBokeh);
+  }
+
+  window.addEventListener('resize', resizeBokeh);
+  initBokeh();
+  animateBokeh();
+
+  // ============================================
+  // FLOATING BUTTERFLIES
+  // ============================================
+  function createButterfly() {
+    const butterfly = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    butterfly.setAttribute('viewBox', '0 0 24 24');
+    butterfly.setAttribute('class', 'butterfly');
+    butterfly.setAttribute('aria-hidden', 'true');
+
+    // Simple butterfly shape
+    butterfly.innerHTML = `
+      <path d="M12 2C8 2 4 6 4 10C4 14 8 18 12 22C16 18 20 14 20 10C20 6 16 2 12 2Z" fill="rgba(232,180,184,0.6)"/>
+      <path d="M12 6C10 6 8 8 8 10C8 12 10 14 12 16C14 14 16 12 16 10C16 8 14 6 12 6Z" fill="rgba(255,255,255,0.8)"/>
+    `;
+
+    butterfly.style.left = Math.random() * 100 + '%';
+    butterfly.style.top = Math.random() * 100 + '%';
+    butterfly.style.animationDuration = (Math.random() * 10 + 10) + 's';
+    butterfly.style.animationDelay = (Math.random() * 5) + 's';
+
+    return butterfly;
+  }
+
+  function initButterflies() {
+    const count = window.innerWidth < 768 ? 3 : 5;
+    for (let i = 0; i < count; i++) {
+      butterfliesContainer.appendChild(createButterfly());
+    }
+  }
+
+  initButterflies();
+
+  // ============================================
+  // INTERSECTION OBSERVER FOR SCROLL ANIMATIONS
+  // ============================================
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.timeline-item, .gallery-item').forEach(el => {
+    observer.observe(el);
+  });
+
+  // ============================================
+  // INITIALIZATION
+  // ============================================
+  showScreen('lock');
+
+})();
+</script>
+</body>
+</html>
