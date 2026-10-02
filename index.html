@@ -1324,7 +1324,8 @@
 
       // Proposal moment: stop the BGM, play the celebration track once,
       // show the finale animation, and only then continue to the final chapter.
-      async function celebrateYes() {\n        if (window.__shaaluLoveBurst) window.__shaaluLoveBurst();
+      async function celebrateYes() {
+        if (window.__shaaluLoveBurst) window.__shaaluLoveBurst();
         if (bgm) {
           try { bgm.pause(); bgm.currentTime = 0; } catch (_) {}
         }
@@ -1422,7 +1423,7 @@
       // Preserve the original butterfly system, while filling the sky with a
       // larger number of independently timed, gently drifting butterflies.
       if (butterflyLayer) {
-        const count = window.innerWidth < 600 ? 9 : 16;
+        const count = window.innerWidth < 600 ? 5 : 8;
         const wing = '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M31 31C18 8 2 10 8 25c4 10 13 12 22 8C19 48 25 62 32 39c7 23 13 9 2-6 9 4 18 2 22-8C62 10 46 8 33 31Z" fill="none" stroke="rgba(232,165,184,.92)" stroke-width="1.7"/><path d="M32 28v13" stroke="rgba(244,208,104,.8)" stroke-width="1.2"/></svg>';
         for (let i = 0; i < count; i++) {
           const b = document.createElement('div');
@@ -1470,13 +1471,17 @@
         document.body.appendChild(s);
         setTimeout(() => s.remove(), 7000);
       }
-      sparkleTimer = setInterval(sparkle, 850);
+      sparkleTimer = setInterval(sparkle, 1800);
 
       // Premium cursor parallax on desktop.
       const cursor = document.getElementById('cursor');
       const cursorDot = document.getElementById('cursorDot');
+      const parallaxCards = Array.from(document.querySelectorAll('.timeline-card'));
       if (window.matchMedia && window.matchMedia('(pointer:fine)').matches) {
+        let cursorFrame = 0;
         window.addEventListener('pointermove', (e) => {
+          if (cursorFrame) cancelAnimationFrame(cursorFrame);
+          cursorFrame = requestAnimationFrame(() => {
           if (cursor) {
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
@@ -1485,13 +1490,15 @@
             cursorDot.style.left = e.clientX + 'px';
             cursorDot.style.top = e.clientY + 'px';
           }
-          document.querySelectorAll('.timeline-card').forEach(card => {
+          parallaxCards.forEach(card => {
             const r = card.getBoundingClientRect();
             if (r.top < e.clientY && e.clientY < r.bottom && r.left < e.clientX && e.clientX < r.right) {
               const rx = ((e.clientY-r.top)/r.height-.5)*-3;
               const ry = ((e.clientX-r.left)/r.width-.5)*4;
               card.style.transform = 'translateY(-5px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
             }
+          });
+          cursorFrame = 0;
           });
         }, {passive:true});
       }
@@ -1501,7 +1508,7 @@
         burst.innerHTML = '';
         burst.classList.add('active');
         const icons = ['❤','🦋','✦','♡'];
-        const amount = window.innerWidth < 600 ? 22 : 38;
+        const amount = window.innerWidth < 600 ? 14 : 24;
         for (let i=0; i<amount; i++) {
           const h = document.createElement('span');
           h.className = 'burst-heart';
