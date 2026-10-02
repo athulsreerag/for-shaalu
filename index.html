@@ -216,6 +216,9 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
       font-weight: 300;
       cursor: pointer;
+      touch-action: manipulation;
+      -webkit-user-select: none;
+      user-select: none;
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       transition: all 0.3s ease;
@@ -1119,6 +1122,17 @@
         pin = pin.slice(0, -1);
         dots();
       };
+
+      // Use pointer events directly on the keypad so touch input works reliably on mobile.
+      document.addEventListener('pointerdown', function (event) {
+        const button = event.target.closest && event.target.closest('.dial-btn');
+        if (!button || !document.getElementById('lock-screen') || document.getElementById('lock-screen').classList.contains('hidden')) return;
+        event.preventDefault();
+        event.stopPropagation();
+        if (button.dataset.val) window.__shaaluPin(button.dataset.val);
+        else if (button.id === 'clearBtn') window.__shaaluClear();
+        else if (button.id === 'deleteBtn') window.__shaaluDelete();
+      }, true);
     })();
   </script>
 
