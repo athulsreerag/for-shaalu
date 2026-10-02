@@ -787,30 +787,15 @@
     <div class="eyebrow">The Vault of Memories</div>
     <h1 class="lock-title">For Shaalu</h1>
     <p class="lock-hint">Enter the 4-digit date locked in our hearts (DDMM).</p>
-    
-    <div class="pin-display" id="pin-display">
-      <div class="pin-dot"></div>
-      <div class="pin-dot"></div>
-      <div class="pin-dot"></div>
-      <div class="pin-dot"></div>
-    </div>
-
-    <div class="dial-pad">
-      <button type="button" class="dial-btn" data-val="1" onclick="window.__shaaluPin('1'); return false;">1</button>
-      <button type="button" class="dial-btn" data-val="2" onclick="window.__shaaluPin('2'); return false;">2</button>
-      <button type="button" class="dial-btn" data-val="3" onclick="window.__shaaluPin('3'); return false;">3</button>
-      <button type="button" class="dial-btn" data-val="4" onclick="window.__shaaluPin('4'); return false;">4</button>
-      <button type="button" class="dial-btn" data-val="5" onclick="window.__shaaluPin('5'); return false;">5</button>
-      <button type="button" class="dial-btn" data-val="6" onclick="window.__shaaluPin('6'); return false;">6</button>
-      <button type="button" class="dial-btn" data-val="7" onclick="window.__shaaluPin('7'); return false;">7</button>
-      <button type="button" class="dial-btn" data-val="8" onclick="window.__shaaluPin('8'); return false;">8</button>
-      <button type="button" class="dial-btn" data-val="9" onclick="window.__shaaluPin('9'); return false;">9</button>
-      <button type="button" class="dial-btn" id="clearBtn" onclick="window.__shaaluClear(); return false;">C</button>
-      <button type="button" class="dial-btn" data-val="0" onclick="window.__shaaluPin('0'); return false;">0</button>
-      <button type="button" class="dial-btn" id="deleteBtn" onclick="window.__shaaluDelete(); return false;">⌫</button>
-    </div>
-    
-    <div id="lockError">that's not quite it — try again</div>
+    <form id="pinForm">
+      <div class="pin-display" id="pin-display">
+        <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
+      </div>
+      <input id="pinInput" type="tel" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="4 digit PIN" placeholder="••••" style="display:block;width:220px;height:58px;margin:0 auto 18px;border:1px solid var(--glass-border-hover);border-radius:18px;background:rgba(255,255,255,.06);color:#fff;text-align:center;font-size:28px;letter-spacing:12px;outline:none;">
+      <button type="submit" class="cta-button" style="min-width:220px;">Unlock</button>
+      <div id="lockError">that's not quite it — try again</div>
+    </form>
+    <div style="margin-top:16px;color:rgba(255,250,246,.45);font-size:.8rem;">Hint: 4 October 2021</div>
   </div>
 
   <!-- GATE 2: HEADPHONE GATE -->
@@ -1120,6 +1105,32 @@
         dots();
       };
     })();
+  </script>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+      var form = document.getElementById('pinForm');
+      var input = document.getElementById('pinInput');
+      if (!form || !input) return;
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        var value = input.value;
+        var dots = document.querySelectorAll('#pin-display .pin-dot');
+        dots.forEach(function(dot, i) { dot.classList.toggle('filled', i < value.length); });
+        if (value === '0410') {
+          document.getElementById('lock-screen').classList.add('hidden');
+          window.setTimeout(function(){ document.getElementById('headphone-gate').classList.remove('hidden'); }, 350);
+        } else {
+          document.getElementById('lockError').classList.add('show');
+          window.setTimeout(function(){
+            document.getElementById('lockError').classList.remove('show');
+            input.value = '';
+            dots.forEach(function(dot){ dot.classList.remove('filled'); });
+            input.focus();
+          }, 700);
+        }
+      });
+    });
   </script>
 
   <script>
