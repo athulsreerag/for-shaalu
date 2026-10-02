@@ -449,9 +449,9 @@
     /* Luxury 3D Photo Gallery */
     .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-      margin-top: 48px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 40px;
       width: 100%;
       perspective: 1200px;
     }
@@ -459,7 +459,7 @@
     .gallery-item {
       position: relative;
       aspect-ratio: 4/5;
-      border-radius: 20px;
+      border-radius: 18px;
       overflow: hidden;
       background: rgba(255, 255, 255, 0.02);
       border: 1px solid var(--glass-border);
@@ -468,8 +468,8 @@
     }
 
     .gallery-item:nth-child(5) {
-      grid-column: span 2;
-      aspect-ratio: 16/9;
+      grid-column: auto;
+      aspect-ratio: 4/5;
     }
 
     .gallery-item img {
@@ -489,6 +489,18 @@
     .gallery-item:hover img {
       transform: scale(1.08);
       filter: brightness(1.05) contrast(1.1);
+    }
+
+    @media (max-width: 640px) {
+      .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-top: 32px;
+      }
+
+      .gallery-item {
+        border-radius: 15px;
+      }
     }
 
     /* Letter Section */
@@ -920,11 +932,12 @@
         <div class="eyebrow">Frozen Moments</div>
         <h2>Us, in no particular order</h2>
         <div class="gallery-grid">
-          <div class="gallery-item"><img src="photos/photo1.jpg" alt="Memory 1" loading="lazy"></div>
-          <div class="gallery-item"><img src="photos/photo2.jpg" alt="Memory 2" loading="lazy"></div>
-          <div class="gallery-item"><img src="photos/photo3.jpg" alt="Memory 3" loading="lazy"></div>
-          <div class="gallery-item"><img src="photos/photo4.jpg" alt="Memory 4" loading="lazy"></div>
-          <div class="gallery-item"><img src="photos/photo5.jpg" alt="Memory 5" loading="lazy"></div>
+          <div class="gallery-item"><img src="photos/IMG_20241002_131928801_HDR.jpg" alt="Memory 1" loading="lazy"></div>
+          <div class="gallery-item"><img src="photos/IMG_20260126_102349623.jpg" alt="Memory 2" loading="lazy"></div>
+          <div class="gallery-item"><img src="photos/IMG_20260522_145356.jpg" alt="Memory 3" loading="lazy"></div>
+          <div class="gallery-item"><img src="photos/IMG_20260522_173109.jpg" alt="Memory 4" loading="lazy"></div>
+          <div class="gallery-item"><img src="photos/IMG_20260522_173135.jpg" alt="Memory 5" loading="lazy"></div>
+          <div class="gallery-item"><img src="photos/IMG_20260620_183620.jpg" alt="Memory 6" loading="lazy"></div>
         </div>
       </div>
     </section>
