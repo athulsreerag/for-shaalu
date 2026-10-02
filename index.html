@@ -1077,11 +1077,11 @@
         <h2>Us, in no particular order</h2>
         <div class="gallery-grid">
           <div class="gallery-item"><img src="https://raw.githubusercontent.com/athulsreerag/for-shaalu/main/photos/IMG_20241002_131928801_HDR.jpg" alt="Memory 1" loading="eager" decoding="async"></div>
-          <div class="gallery-item"><img src="https://raw.githubusercontent.com/athulsreerag/for-shaalu/main/photos/IMG_20260126_102349623.jpg" alt="Memory 2" loading="eager" decoding="async"></div>
-          <div class="gallery-item"><img src="https://raw.githubusercontent.com/athulsreerag/for-shaalu/main/photos/IMG_20260522_145356.jpg" alt="Memory 3" loading="eager" decoding="async"></div>
-          <div class="gallery-item"><img src="https://raw.githubusercontent.com/athulsreerag/for-shaalu/main/photos/IMG_20260522_173109.jpg" alt="Memory 4" loading="eager" decoding="async"></div>
-          <div class="gallery-item"><img src="https://raw.githubusercontent.com/athulsreerag/for-shaalu/main/photos/IMG_20260522_173135.jpg" alt="Memory 5" loading="eager" decoding="async"></div>
-          <div class="gallery-item"><img src="https://raw.githubusercontent.com/athulsreerag/for-shaalu/main/photos/IMG_20260620_183620.jpg" alt="Memory 6" loading="eager" decoding="async"></div>
+          <div class="gallery-item"><img src="https://raw.githubusercontent.com/athulsreerag/for-shaalu/main/photos/IMG_20260126_102349623.jpg" alt="Memory 2" loading="lazy" decoding="async"></div>
+          <div class="gallery-item"><img src="https://raw.githubusercontent.com/athulsreerag/for-shaalu/main/photos/IMG_20260522_145356.jpg" alt="Memory 3" loading="lazy" decoding="async"></div>
+          <div class="gallery-item"><img src="https://raw.githubusercontent.com/athulsreerag/for-shaalu/main/photos/IMG_20260522_173109.jpg" alt="Memory 4" loading="lazy" decoding="async"></div>
+          <div class="gallery-item"><img src="https://raw.githubusercontent.com/athulsreerag/for-shaalu/main/photos/IMG_20260522_173135.jpg" alt="Memory 5" loading="lazy" decoding="async"></div>
+          <div class="gallery-item"><img src="https://raw.githubusercontent.com/athulsreerag/for-shaalu/main/photos/IMG_20260620_183620.jpg" alt="Memory 6" loading="lazy" decoding="async"></div>
         </div>
       </div>
     </section>
@@ -1274,9 +1274,12 @@
       const celebrate = $('celebrate');
 
       let isMuted = false;
+      let experienceStarted = false;
 
       // Reveal the main experience. Nothing here is allowed to block the page.
       function enterExperience() {
+        if (experienceStarted) return;
+        experienceStarted = true;
         if (headphoneGate) headphoneGate.classList.add('hidden');
         if (site) {
           site.classList.add('revealed');
@@ -1294,8 +1297,6 @@
       window.__enterShaaluWorld = enterExperience;
       if (continueBtn) {
         continueBtn.addEventListener('click', enterExperience, { passive: true });
-        continueBtn.addEventListener('pointerup', enterExperience, { passive: true });
-        continueBtn.addEventListener('touchend', enterExperience, { passive: true });
       }
 
       if (startBtn) {
