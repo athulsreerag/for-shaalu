@@ -799,18 +799,18 @@
     </div>
 
     <div class="dial-pad">
-      <button type="button" class="dial-btn" data-val="1" onclick="window.__shaaluPin('1'); return false;">1</button>
-      <button type="button" class="dial-btn" data-val="2" onclick="window.__shaaluPin('2'); return false;">2</button>
-      <button type="button" class="dial-btn" data-val="3" onclick="window.__shaaluPin('3'); return false;">3</button>
-      <button type="button" class="dial-btn" data-val="4" onclick="window.__shaaluPin('4'); return false;">4</button>
-      <button type="button" class="dial-btn" data-val="5" onclick="window.__shaaluPin('5'); return false;">5</button>
-      <button type="button" class="dial-btn" data-val="6" onclick="window.__shaaluPin('6'); return false;">6</button>
-      <button type="button" class="dial-btn" data-val="7" onclick="window.__shaaluPin('7'); return false;">7</button>
-      <button type="button" class="dial-btn" data-val="8" onclick="window.__shaaluPin('8'); return false;">8</button>
-      <button type="button" class="dial-btn" data-val="9" onclick="window.__shaaluPin('9'); return false;">9</button>
-      <button type="button" class="dial-btn" id="clearBtn" onclick="window.__shaaluClear(); return false;">C</button>
-      <button type="button" class="dial-btn" data-val="0" onclick="window.__shaaluPin('0'); return false;">0</button>
-      <button type="button" class="dial-btn" id="deleteBtn" onclick="window.__shaaluDelete(); return false;">⌫</button>
+      <button type="button" class="dial-btn" data-val="1" onpointerdown="event.preventDefault(); window.__shaaluPin('1'); return false;">1</button>
+      <button type="button" class="dial-btn" data-val="2" onpointerdown="event.preventDefault(); window.__shaaluPin('2'); return false;">2</button>
+      <button type="button" class="dial-btn" data-val="3" onpointerdown="event.preventDefault(); window.__shaaluPin('3'); return false;">3</button>
+      <button type="button" class="dial-btn" data-val="4" onpointerdown="event.preventDefault(); window.__shaaluPin('4'); return false;">4</button>
+      <button type="button" class="dial-btn" data-val="5" onpointerdown="event.preventDefault(); window.__shaaluPin('5'); return false;">5</button>
+      <button type="button" class="dial-btn" data-val="6" onpointerdown="event.preventDefault(); window.__shaaluPin('6'); return false;">6</button>
+      <button type="button" class="dial-btn" data-val="7" onpointerdown="event.preventDefault(); window.__shaaluPin('7'); return false;">7</button>
+      <button type="button" class="dial-btn" data-val="8" onpointerdown="event.preventDefault(); window.__shaaluPin('8'); return false;">8</button>
+      <button type="button" class="dial-btn" data-val="9" onpointerdown="event.preventDefault(); window.__shaaluPin('9'); return false;">9</button>
+      <button type="button" class="dial-btn" id="clearBtn" onpointerdown="event.preventDefault(); window.__shaaluClear(); return false;">C</button>
+      <button type="button" class="dial-btn" data-val="0" onpointerdown="event.preventDefault(); window.__shaaluPin('0'); return false;">0</button>
+      <button type="button" class="dial-btn" id="deleteBtn" onpointerdown="event.preventDefault(); window.__shaaluDelete(); return false;">⌫</button>
     </div>
     
     <div id="lockError">that's not quite it — try again</div>
@@ -1123,16 +1123,7 @@
         dots();
       };
 
-      // Use pointer events directly on the keypad so touch input works reliably on mobile.
-      document.addEventListener('pointerdown', function (event) {
-        const button = event.target.closest && event.target.closest('.dial-btn');
-        if (!button || !document.getElementById('lock-screen') || document.getElementById('lock-screen').classList.contains('hidden')) return;
-        event.preventDefault();
-        event.stopPropagation();
-        if (button.dataset.val) window.__shaaluPin(button.dataset.val);
-        else if (button.id === 'clearBtn') window.__shaaluClear();
-        else if (button.id === 'deleteBtn') window.__shaaluDelete();
-      }, true);
+
     })();
   </script>
 
