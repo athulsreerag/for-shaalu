@@ -787,15 +787,30 @@
     <div class="eyebrow">The Vault of Memories</div>
     <h1 class="lock-title">For Shaalu</h1>
     <p class="lock-hint">Enter the 4-digit date locked in our hearts (DDMM).</p>
-    <form id="pinForm">
-      <div class="pin-display" id="pin-display">
-        <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
-      </div>
-      <input id="pinInput" type="tel" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="4 digit PIN" placeholder="••••" style="display:block;width:220px;height:58px;margin:0 auto 18px;border:1px solid var(--glass-border-hover);border-radius:18px;background:rgba(255,255,255,.06);color:#fff;text-align:center;font-size:28px;letter-spacing:12px;outline:none;">
-      <button type="submit" class="cta-button" style="min-width:220px;">Unlock</button>
-      <div id="lockError">that's not quite it — try again</div>
-    </form>
-    <div style="margin-top:16px;color:rgba(255,250,246,.45);font-size:.8rem;">Hint: 4 October 2021</div>
+    
+    <div class="pin-display" id="pin-display">
+      <div class="pin-dot"></div>
+      <div class="pin-dot"></div>
+      <div class="pin-dot"></div>
+      <div class="pin-dot"></div>
+    </div>
+
+    <div class="dial-pad">
+      <button type="button" class="dial-btn" data-val="1" onclick="window.__shaaluPin('1'); return false;">1</button>
+      <button type="button" class="dial-btn" data-val="2" onclick="window.__shaaluPin('2'); return false;">2</button>
+      <button type="button" class="dial-btn" data-val="3" onclick="window.__shaaluPin('3'); return false;">3</button>
+      <button type="button" class="dial-btn" data-val="4" onclick="window.__shaaluPin('4'); return false;">4</button>
+      <button type="button" class="dial-btn" data-val="5" onclick="window.__shaaluPin('5'); return false;">5</button>
+      <button type="button" class="dial-btn" data-val="6" onclick="window.__shaaluPin('6'); return false;">6</button>
+      <button type="button" class="dial-btn" data-val="7" onclick="window.__shaaluPin('7'); return false;">7</button>
+      <button type="button" class="dial-btn" data-val="8" onclick="window.__shaaluPin('8'); return false;">8</button>
+      <button type="button" class="dial-btn" data-val="9" onclick="window.__shaaluPin('9'); return false;">9</button>
+      <button type="button" class="dial-btn" id="clearBtn" onclick="window.__shaaluClear(); return false;">C</button>
+      <button type="button" class="dial-btn" data-val="0" onclick="window.__shaaluPin('0'); return false;">0</button>
+      <button type="button" class="dial-btn" id="deleteBtn" onclick="window.__shaaluDelete(); return false;">⌫</button>
+    </div>
+    
+    <div id="lockError">that's not quite it — try again</div>
   </div>
 
   <!-- GATE 2: HEADPHONE GATE -->
@@ -1108,32 +1123,6 @@
   </script>
 
   <script>
-    window.addEventListener('DOMContentLoaded', function () {
-      var form = document.getElementById('pinForm');
-      var input = document.getElementById('pinInput');
-      if (!form || !input) return;
-      form.addEventListener('submit', function (event) {
-        event.preventDefault();
-        var value = input.value;
-        var dots = document.querySelectorAll('#pin-display .pin-dot');
-        dots.forEach(function(dot, i) { dot.classList.toggle('filled', i < value.length); });
-        if (value === '0410') {
-          document.getElementById('lock-screen').classList.add('hidden');
-          window.setTimeout(function(){ document.getElementById('headphone-gate').classList.remove('hidden'); }, 350);
-        } else {
-          document.getElementById('lockError').classList.add('show');
-          window.setTimeout(function(){
-            document.getElementById('lockError').classList.remove('show');
-            input.value = '';
-            dots.forEach(function(dot){ dot.classList.remove('filled'); });
-            input.focus();
-          }, 700);
-        }
-      });
-    });
-  </script>
-
-  <script>
     (function() {
       'use strict';
 
@@ -1209,210 +1198,3 @@
           }, 700);
         }
       }
-
-      // Pre-warming Mobile Audio & Unlocking Context
-      continueBtn.addEventListener('click', () => {
-        headphoneGate.classList.add('hidden');
-        site.classList.add('revealed');
-        document.body.style.overflow = 'auto';
-
-        celebrate.load();
-        celebrate.volume = 0;
-        const warmPromise = celebrate.play();
-        if (warmPromise !== undefined) {
-          warmPromise.then(() => {
-            celebrate.pause();
-            celebrate.currentTime = 0;
-          }).catch(() => {});
-        }
-
-        if (!isMuted) {
-          bgm.volume = 0.3;
-          bgm.play().catch(() => {});
-        }
-      });
-
-      startBtn.addEventListener('click', () => {
-        document.getElementById('timeline').scrollIntoView({ behavior: 'smooth' });
-      });
-
-      muteToggle.addEventListener('click', () => {
-        isMuted = !isMuted;
-        const active = isCelebrating ? celebrate : bgm;
-        if (isMuted) {
-          active.pause();
-          muteToggle.textContent = '🔇';
-        } else {
-          active.play().catch(() => {});
-          muteToggle.textContent = '🔊';
-        }
-      });
-
-      // Interactive Celebration Engine
-      function triggerCelebration() {
-        isCelebrating = true;
-
-        bgm.pause();
-        if (!isMuted) {
-          celebrate.currentTime = 0;
-          celebrate.volume = 0.85;
-          celebrate.play().catch(() => {});
-        }
-
-        document.querySelectorAll('#site .section').forEach(sec => sec.style.display = 'none');
-        finale.style.display = 'flex';
-        window.scrollTo(0, 0);
-
-        launchConfetti();
-        setTimeout(launchConfetti, 800);
-        setTimeout(launchConfetti, 1600);
-      }
-
-      yesBtn.addEventListener('click', triggerCelebration);
-      alsoYesBtn.addEventListener('click', triggerCelebration);
-
-      toThoughtsBtn.addEventListener('click', () => {
-        finale.style.display = 'none';
-        herThoughts.style.display = 'flex';
-        window.scrollTo(0, 0);
-        const saved = localStorage.getItem('shaalu_thoughts');
-        if (saved) thoughtsBox.value = saved;
-      });
-
-      saveThoughtsBtn.addEventListener('click', () => {
-        localStorage.setItem('shaalu_thoughts', thoughtsBox.value);
-        showStatus('Saved inside this sanctuary 🦋');
-      });
-
-      copyThoughtsBtn.addEventListener('click', async () => {
-        try {
-          await navigator.clipboard.writeText(thoughtsBox.value);
-          showStatus('Copied! Send it to me ❤');
-        } catch(e) {
-          showStatus('Please copy manually');
-        }
-      });
-
-      function showStatus(text) {
-        thoughtsStatus.textContent = text;
-        thoughtsStatus.classList.add('show');
-        setTimeout(() => thoughtsStatus.classList.remove('show'), 2400);
-      }
-
-      // Ambient Butterfly Floating Generator
-      const butterflyContainer = document.getElementById('butterflies');
-      const colors = ['#f4d068', '#e8a5b8', '#ff4d6d', '#a29bfe'];
-      for (let i = 0; i < 12; i++) {
-        const b = document.createElement('div');
-        b.className = 'butterfly';
-        b.style.left = (Math.random() * 92) + '%';
-        b.style.top = (Math.random() * 95) + '%';
-        b.style.animationDuration = (12 + Math.random() * 10) + 's';
-        b.style.animationDelay = (Math.random() * 5) + 's';
-        const color = colors[i % colors.length];
-        b.innerHTML = `
-          <svg viewBox="0 0 100 80" fill="${color}">
-            <path d="M50,38 C32,10 2,10 6,34 C9,54 32,50 50,40 Z" opacity="0.85"/>
-            <path d="M50,38 C68,10 98,10 94,34 C91,54 68,50 50,40 Z" opacity="0.85"/>
-            <path d="M50,40 C36,54 4,58 7,74 C11,88 36,78 50,46 Z" opacity="0.65"/>
-            <path d="M50,40 C64,54 96,58 93,74 C89,88 64,78 50,46 Z" opacity="0.65"/>
-          </svg>
-        `;
-        butterflyContainer.appendChild(b);
-      }
-
-      // High-End Particle Universe Canvas
-      const uCanvas = document.getElementById('universe-canvas');
-      const uCtx = uCanvas.getContext('2d');
-      let uParticles = [];
-
-      function resizeUniverse() {
-        uCanvas.width = window.innerWidth;
-        uCanvas.height = window.innerHeight;
-      }
-      resizeUniverse();
-      window.addEventListener('resize', resizeUniverse);
-
-      for (let i = 0; i < 60; i++) {
-        uParticles.push({
-          x: Math.random() * window.innerWidth,
-          y: Math.random() * window.innerHeight,
-          r: Math.random() * 2 + 0.5,
-          dx: (Math.random() - 0.5) * 0.3,
-          dy: (Math.random() - 0.5) * 0.3,
-          alpha: Math.random() * 0.6 + 0.2
-        });
-      }
-
-      function drawUniverse() {
-        uCtx.clearRect(0, 0, uCanvas.width, uCanvas.height);
-        uParticles.forEach(p => {
-          p.x += p.dx;
-          p.y += p.dy;
-          if (p.x < 0) p.x = uCanvas.width;
-          if (p.x > uCanvas.width) p.x = 0;
-          if (p.y < 0) p.y = uCanvas.height;
-          if (p.y > uCanvas.height) p.y = 0;
-
-          uCtx.beginPath();
-          uCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-          uCtx.fillStyle = `rgba(232, 165, 184, ${p.alpha})`;
-          uCtx.fill();
-        });
-        requestAnimationFrame(drawUniverse);
-      }
-      drawUniverse();
-
-      // Confetti Burst Engine
-      const cCanvas = document.getElementById('confetti-canvas');
-      const cCtx = cCanvas.getContext('2d');
-      function resizeConfetti() {
-        cCanvas.width = window.innerWidth;
-        cCanvas.height = window.innerHeight;
-      }
-      resizeConfetti();
-      window.addEventListener('resize', resizeConfetti);
-
-      function launchConfetti() {
-        const colors = ['#f4d068', '#e8a5b8', '#ff4d6d', '#ffffff', '#badc58'];
-        let parts = [];
-        for (let i = 0; i < 140; i++) {
-          parts.push({
-            x: cCanvas.width / 2,
-            y: cCanvas.height * 0.45,
-            vx: (Math.random() - 0.5) * 16,
-            vy: (Math.random() - 0.75) * 18,
-            size: Math.random() * 8 + 4,
-            color: colors[Math.floor(Math.random() * colors.length)],
-            rotation: Math.random() * 360,
-            rSpeed: (Math.random() - 0.5) * 10
-          });
-        }
-
-        let frame = 0;
-        function tick() {
-          frame++;
-          cCtx.clearRect(0, 0, cCanvas.width, cCanvas.height);
-          parts.forEach(p => {
-            p.vy += 0.25;
-            p.x += p.vx;
-            p.y += p.vy;
-            p.rotation += p.rSpeed;
-
-            cCtx.save();
-            cCtx.translate(p.x, p.y);
-            cCtx.rotate((p.rotation * Math.PI) / 180);
-            cCtx.fillStyle = p.color;
-            cCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
-            cCtx.restore();
-          });
-
-          if (frame < 160) requestAnimationFrame(tick);
-          else cCtx.clearRect(0, 0, cCanvas.width, cCanvas.height);
-        }
-        tick();
-      }
-    })();
-  </script>
-</body>
-</html>
