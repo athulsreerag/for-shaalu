@@ -796,18 +796,18 @@
     </div>
 
     <div class="dial-pad">
-      <button class="dial-btn" data-val="1">1</button>
-      <button class="dial-btn" data-val="2">2</button>
-      <button class="dial-btn" data-val="3">3</button>
-      <button class="dial-btn" data-val="4">4</button>
-      <button class="dial-btn" data-val="5">5</button>
-      <button class="dial-btn" data-val="6">6</button>
-      <button class="dial-btn" data-val="7">7</button>
-      <button class="dial-btn" data-val="8">8</button>
-      <button class="dial-btn" data-val="9">9</button>
-      <button class="dial-btn" id="clearBtn">C</button>
-      <button class="dial-btn" data-val="0">0</button>
-      <button class="dial-btn" id="deleteBtn">⌫</button>
+      <button type="button" class="dial-btn" data-val="1" onclick="window.__shaaluPin('1'); return false;">1</button>
+      <button type="button" class="dial-btn" data-val="2" onclick="window.__shaaluPin('2'); return false;">2</button>
+      <button type="button" class="dial-btn" data-val="3" onclick="window.__shaaluPin('3'); return false;">3</button>
+      <button type="button" class="dial-btn" data-val="4" onclick="window.__shaaluPin('4'); return false;">4</button>
+      <button type="button" class="dial-btn" data-val="5" onclick="window.__shaaluPin('5'); return false;">5</button>
+      <button type="button" class="dial-btn" data-val="6" onclick="window.__shaaluPin('6'); return false;">6</button>
+      <button type="button" class="dial-btn" data-val="7" onclick="window.__shaaluPin('7'); return false;">7</button>
+      <button type="button" class="dial-btn" data-val="8" onclick="window.__shaaluPin('8'); return false;">8</button>
+      <button type="button" class="dial-btn" data-val="9" onclick="window.__shaaluPin('9'); return false;">9</button>
+      <button type="button" class="dial-btn" id="clearBtn" onclick="window.__shaaluClear(); return false;">C</button>
+      <button type="button" class="dial-btn" data-val="0" onclick="window.__shaaluPin('0'); return false;">0</button>
+      <button type="button" class="dial-btn" id="deleteBtn" onclick="window.__shaaluDelete(); return false;">⌫</button>
     </div>
     
     <div id="lockError">that's not quite it — try again</div>
@@ -1073,6 +1073,56 @@
   <canvas id="confetti-canvas"></canvas>
 
   <script>
+    // PIN gate: deliberately isolated from the rest of the page so the keypad
+    // remains usable even if a later animation/audio feature fails to initialize.
+    (function () {
+      let pin = '';
+      const CODE = '0410';
+
+      function dots() {
+        document.querySelectorAll('.pin-dot').forEach(function (dot, i) {
+          dot.classList.toggle('filled', i < pin.length);
+        });
+      }
+
+      function resetPin() {
+        pin = '';
+        dots();
+      }
+
+      window.__shaaluPin = function (digit) {
+        if (pin.length >= 4) return;
+        pin += String(digit);
+        dots();
+
+        if (pin.length === 4) {
+          if (pin === CODE) {
+            const lock = document.getElementById('lock-screen');
+            const gate = document.getElementById('headphone-gate');
+            if (lock) lock.classList.add('hidden');
+            window.setTimeout(function () {
+              if (gate) gate.classList.remove('hidden');
+            }, 350);
+          } else {
+            const error = document.getElementById('lockError');
+            if (error) error.classList.add('show');
+            window.setTimeout(function () {
+              if (error) error.classList.remove('show');
+              resetPin();
+            }, 700);
+          }
+        }
+      };
+
+      window.__shaaluClear = resetPin;
+      window.__shaaluDelete = function () {
+        pin = pin.slice(0, -1);
+        dots();
+      };
+    })();
+  </script>
+
+  <script>
     (function() {
       'use strict';
 
@@ -1124,26 +1174,8 @@
       const saveThoughtsBtn = document.getElementById('saveThoughtsBtn');
       const copyThoughtsBtn = document.getElementById('copyThoughtsBtn');
 
-      // Pin Pad Interactivity
-      document.querySelectorAll('.dial-btn[data-val]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          if (enteredPin.length >= 4) return;
-          enteredPin += btn.dataset.val;
-          updatePinDots();
-          if (enteredPin.length === 4) checkPin();
-        });
-      });
-
-      document.getElementById('clearBtn').addEventListener('click', () => {
-        enteredPin = '';
-        updatePinDots();
-      });
-
-      document.getElementById('deleteBtn').addEventListener('click', () => {
-        enteredPin = enteredPin.slice(0, -1);
-        updatePinDots();
-      });
-
+      // PIN keypad is handled by the isolated gate above.
+      // Keeping these functions available for the rest of the page.
       function updatePinDots() {
         pinDots.forEach((dot, idx) => {
           if (idx < enteredPin.length) dot.classList.add('filled');
