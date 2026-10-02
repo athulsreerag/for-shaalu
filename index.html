@@ -949,7 +949,7 @@
     </div>
     <h2 class="gate-heading">Plug In Headphones</h2>
     <p class="gate-subtitle">Designed for an immersive audio-visual experience. Put them on, breathe, and slow down.</p>
-    <button class="cta-button" id="continueBtn">Enter Our World ❤</button>
+    <button class="cta-button" id="continueBtn" type="button">Enter Our World ❤</button>
   </div>
 
   <!-- MAIN SCROLLABLE SITE CANVAS -->
@@ -1290,7 +1290,13 @@
         }
       }
 
-      if (continueBtn) continueBtn.addEventListener('click', enterExperience);
+      // Keep the gate button extremely robust on mobile browsers.
+      window.__enterShaaluWorld = enterExperience;
+      if (continueBtn) {
+        continueBtn.addEventListener('click', enterExperience, { passive: true });
+        continueBtn.addEventListener('pointerup', enterExperience, { passive: true });
+        continueBtn.addEventListener('touchend', enterExperience, { passive: true });
+      }
 
       if (startBtn) {
         startBtn.addEventListener('click', () => {
