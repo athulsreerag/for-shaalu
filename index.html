@@ -1193,20 +1193,39 @@
         });
       }
 
-      // Keep the proposal interaction lightweight and failure-safe.
-      function celebrateYes() {
+      // Proposal moment: stop the BGM, play the celebration track once,
+      // show the finale animation, and only then continue to the final chapter.
+      async function celebrateYes() {
+        if (bgm) {
+          try { bgm.pause(); bgm.currentTime = 0; } catch (_) {}
+        }
+
+        if (celebrate) {
+          try {
+            celebrate.currentTime = 0;
+            celebrate.loop = false;
+            const p = celebrate.play();
+            if (p && typeof p.catch === 'function') p.catch(() => {});
+          } catch (_) {}
+        }
+
         if (celebrate) {
           celebrate.classList.add('active');
-          setTimeout(() => celebrate.classList.remove('active'), 1800);
+          setTimeout(() => celebrate.classList.remove('active'), 5000);
         }
+
         if (finale) {
           finale.style.display = 'flex';
-          setTimeout(() => finale.scrollIntoView({behavior:'smooth', block:'start'}), 50);
+          finale.classList.add('revealed');
+          requestAnimationFrame(() => {
+            setTimeout(() => finale.scrollIntoView({behavior:'smooth', block:'start'}), 100);
+          });
         }
       }
 
       if (yesBtn) yesBtn.addEventListener('click', celebrateYes);
       if (alsoYesBtn) alsoYesBtn.addEventListener('click', celebrateYes);
+
 
       if (toThoughtsBtn) {
         toThoughtsBtn.addEventListener('click', () => {
