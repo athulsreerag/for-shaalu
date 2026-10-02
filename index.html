@@ -1128,78 +1128,139 @@
   </script>
 
   <script>
-    (function() {
+    (function () {
       'use strict';
 
-      // Custom Mouse Cursor Physics
-      const cursor = document.querySelector('.custom-cursor');
-      const cursorDot = document.querySelector('.custom-cursor-dot');
-      let mouseX = 0, mouseY = 0;
-      let cursorX = 0, cursorY = 0;
+      const $ = (id) => document.getElementById(id);
+      const lockScreen = $('lock-screen');
+      const headphoneGate = $('headphone-gate');
+      const site = $('site');
+      const continueBtn = $('continueBtn');
+      const startBtn = $('startBtn');
+      const muteToggle = $('muteToggle');
+      const bgm = $('bgm');
+      const yesBtn = $('yesBtn');
+      const alsoYesBtn = $('alsoYesBtn');
+      const finale = $('finale');
+      const herThoughts = $('herThoughts');
+      const toThoughtsBtn = $('toThoughtsBtn');
+      const thoughtsBox = $('thoughtsBox');
+      const thoughtsStatus = $('thoughtsStatus');
+      const saveThoughtsBtn = $('saveThoughtsBtn');
+      const copyThoughtsBtn = $('copyThoughtsBtn');
+      const celebrate = $('celebrate');
 
-      window.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        cursorDot.style.left = `${mouseX}px`;
-        cursorDot.style.top = `${mouseY}px`;
-      });
-
-      function renderCursor() {
-        cursorX += (mouseX - cursorX) * 0.15;
-        cursorY += (mouseY - cursorY) * 0.15;
-        cursor.style.left = `${cursorX}px`;
-        cursor.style.top = `${cursorY}px`;
-        requestAnimationFrame(renderCursor);
-      }
-      renderCursor();
-
-      // State Management
-      const PIN = '0410';
-      let enteredPin = '';
-      let isCelebrating = false;
       let isMuted = false;
 
-      const lockScreen = document.getElementById('lock-screen');
-      const headphoneGate = document.getElementById('headphone-gate');
-      const site = document.getElementById('site');
-      const pinDots = document.querySelectorAll('.pin-dot');
-      const lockError = document.getElementById('lockError');
-      const continueBtn = document.getElementById('continueBtn');
-      const startBtn = document.getElementById('startBtn');
-      const muteToggle = document.getElementById('muteToggle');
-      const bgm = document.getElementById('bgm');
-      const celebrate = document.getElementById('celebrate');
-      const yesBtn = document.getElementById('yesBtn');
-      const alsoYesBtn = document.getElementById('alsoYesBtn');
-      const finale = document.getElementById('finale');
-      const herThoughts = document.getElementById('herThoughts');
-      const toThoughtsBtn = document.getElementById('toThoughtsBtn');
-      const thoughtsBox = document.getElementById('thoughtsBox');
-      const thoughtsStatus = document.getElementById('thoughtsStatus');
-      const saveThoughtsBtn = document.getElementById('saveThoughtsBtn');
-      const copyThoughtsBtn = document.getElementById('copyThoughtsBtn');
+      // Reveal the main experience. Nothing here is allowed to block the page.
+      function enterExperience() {
+        if (headphoneGate) headphoneGate.classList.add('hidden');
+        if (site) {
+          site.classList.add('revealed');
+          site.style.pointerEvents = 'auto';
+        }
+        document.body.classList.add('experience-started');
 
-      // PIN keypad is handled by the isolated gate above.
-      // Keeping these functions available for the rest of the page.
-      function updatePinDots() {
-        pinDots.forEach((dot, idx) => {
-          if (idx < enteredPin.length) dot.classList.add('filled');
-          else dot.classList.remove('filled');
+        if (bgm && !isMuted) {
+          const play = bgm.play();
+          if (play && typeof play.catch === 'function') play.catch(() => {});
+        }
+      }
+
+      if (continueBtn) continueBtn.addEventListener('click', enterExperience);
+
+      if (startBtn) {
+        startBtn.addEventListener('click', () => {
+          const timeline = $('timeline');
+          if (timeline) timeline.scrollIntoView({behavior:'smooth', block:'start'});
         });
       }
 
-      function checkPin() {
-        if (enteredPin === PIN) {
-          lockScreen.classList.add('hidden');
-          setTimeout(() => {
-            headphoneGate.classList.remove('hidden');
-          }, 400);
-        } else {
-          lockError.classList.add('show');
-          setTimeout(() => {
-            lockError.classList.remove('show');
-            enteredPin = '';
-            updatePinDots();
-          }, 700);
+      // Audio is optional. A missing/blocked audio file must never break the site.
+      if (muteToggle) {
+        muteToggle.addEventListener('click', () => {
+          isMuted = !isMuted;
+          if (bgm) {
+            bgm.muted = isMuted;
+            if (isMuted) bgm.pause();
+            else {
+              const p = bgm.play();
+              if (p && typeof p.catch === 'function') p.catch(() => {});
+            }
+          }
+          muteToggle.textContent = isMuted ? '🔇' : '♫';
+          muteToggle.setAttribute('aria-label', isMuted ? 'Unmute music' : 'Mute music');
+        });
+      }
+
+      // Keep the proposal interaction lightweight and failure-safe.
+      function celebrateYes() {
+        if (celebrate) {
+          celebrate.classList.add('active');
+          setTimeout(() => celebrate.classList.remove('active'), 1800);
+        }
+        if (finale) {
+          finale.style.display = 'flex';
+          setTimeout(() => finale.scrollIntoView({behavior:'smooth', block:'start'}), 50);
         }
       }
+
+      if (yesBtn) yesBtn.addEventListener('click', celebrateYes);
+      if (alsoYesBtn) alsoYesBtn.addEventListener('click', celebrateYes);
+
+      if (toThoughtsBtn) {
+        toThoughtsBtn.addEventListener('click', () => {
+          if (herThoughts) {
+            herThoughts.style.display = 'flex';
+            setTimeout(() => herThoughts.scrollIntoView({behavior:'smooth', block:'start'}), 50);
+          }
+        });
+      }
+
+      if (copyThoughtsBtn) {
+        copyThoughtsBtn.addEventListener('click', async () => {
+          const text = thoughtsBox ? thoughtsBox.value : '';
+          try {
+            await navigator.clipboard.writeText(text);
+            if (thoughtsStatus) {
+              thoughtsStatus.textContent = 'Copied ✓';
+              setTimeout(() => thoughtsStatus.textContent = '', 1800);
+            }
+          } catch (_) {
+            if (thoughtsBox) {
+              thoughtsBox.focus();
+              thoughtsBox.select();
+              document.execCommand('copy');
+            }
+            if (thoughtsStatus) thoughtsStatus.textContent = 'Copied ✓';
+          }
+        });
+      }
+
+      if (saveThoughtsBtn) {
+        saveThoughtsBtn.addEventListener('click', () => {
+          const text = thoughtsBox ? thoughtsBox.value.trim() : '';
+          try {
+            localStorage.setItem('shaaluThoughts', text);
+          } catch (_) {}
+          if (thoughtsStatus) {
+            thoughtsStatus.textContent = 'Saved on this device ✓';
+            setTimeout(() => thoughtsStatus.textContent = '', 2200);
+          }
+        });
+      }
+
+      // Restore a locally saved message when available.
+      try {
+        const saved = localStorage.getItem('shaaluThoughts');
+        if (saved && thoughtsBox && !thoughtsBox.value.trim()) thoughtsBox.value = saved;
+      } catch (_) {}
+
+      // Respect reduced-motion preferences.
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.style.scrollBehavior = 'auto';
+      }
+    })();
+  </script>
+</body>
+</html>
