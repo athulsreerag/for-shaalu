@@ -863,30 +863,40 @@
 .firework-burst { position:absolute; left:var(--fx); top:var(--fy); width:28px; height:28px; border-radius:50%; transform:translate(-50%,-50%) scale(.08); background:radial-gradient(circle,#fff 0 5%,rgba(244,208,104,.98) 12%,rgba(232,165,184,.5) 30%,transparent 72%); animation:burstFlash 1.65s ease-out forwards; animation-delay:var(--fd,0s); will-change:transform,opacity; }
 @keyframes burstFlash { 0%{opacity:0;transform:translate(-50%,-50%) scale(.08)} 10%{opacity:1;transform:translate(-50%,-50%) scale(5)} 34%{opacity:.8;transform:translate(-50%,-50%) scale(9)} 100%{opacity:0;transform:translate(-50%,-50%) scale(15)} }
 
-/* One final magical butterfly lands on an open hand after the fireworks */
-.butterfly-finale { position:fixed; inset:0; z-index:998; pointer-events:none; opacity:0; overflow:hidden; }
-.butterfly-finale.active { opacity:1; }
-.butterfly-hand { position:absolute; left:50%; bottom:7vh; width:clamp(150px,34vw,230px); height:auto; transform:translateX(-50%) translateY(35px) scale(.92); opacity:0; filter:drop-shadow(0 0 18px rgba(232,165,184,.28)); }
-.butterfly-finale.active .butterfly-hand { animation:handReveal 1.4s cubic-bezier(.22,1,.36,1) .25s forwards; }
-.hand-glow { position:absolute; left:50%; bottom:17vh; width:clamp(130px,30vw,210px); height:clamp(90px,20vw,150px); transform:translateX(-50%) scale(.6); border-radius:50%; background:radial-gradient(ellipse,rgba(244,208,104,.18),rgba(232,165,184,.1) 38%,transparent 72%); filter:blur(12px); opacity:0; }
-.butterfly-finale.active .hand-glow { animation:handGlow 2.2s ease-out .4s forwards; }
-.finale-butterfly { position:absolute; left:50%; top:-12%; width:clamp(70px,17vw,110px); height:auto; opacity:0; filter:drop-shadow(0 0 14px rgba(232,165,184,.55)); transform:translate(-50%,0) scale(.55) rotate(-8deg); }
-.butterfly-finale.active .finale-butterfly { animation:butterflyToHand 4.8s cubic-bezier(.22,.61,.36,1) .75s forwards; }
-.finale-butterfly .wing { transform-origin:50% 50%; animation:wingBeat .18s ease-in-out infinite alternate; }
-@keyframes wingBeat { from{transform:scaleX(.72)} to{transform:scaleX(1)} }
-@keyframes handReveal { 0%{opacity:0;transform:translateX(-50%) translateY(35px) scale(.92)} 100%{opacity:.92;transform:translateX(-50%) translateY(0) scale(1)} }
-@keyframes handGlow { 0%{opacity:0;transform:translateX(-50%) scale(.6)} 35%{opacity:1;transform:translateX(-50%) scale(1)} 100%{opacity:.55;transform:translateX(-50%) scale(1.08)} }
-@keyframes butterflyToHand {
-  0%{opacity:0;left:50%;top:-12%;transform:translate(-50%,0) scale(.45) rotate(-8deg)}
-  12%{opacity:1}
-  35%{left:22%;top:28%;transform:translate(-50%,0) scale(.7) rotate(12deg)}
-  58%{left:78%;top:47%;transform:translate(-50%,0) scale(.82) rotate(-10deg)}
-  78%{left:57%;top:67%;transform:translate(-50%,0) scale(.62) rotate(7deg)}
-  92%{left:50%;top:78%;transform:translate(-50%,0) scale(.58) rotate(0deg)}
-  100%{opacity:1;left:50%;top:78%;transform:translate(-50%,0) scale(.56) rotate(0deg)}
+/* Calm 3D butterfly + hand finale */
+.butterfly-finale{position:fixed;inset:0;z-index:998;pointer-events:none;opacity:0;overflow:hidden;perspective:1200px;contain:strict}
+.butterfly-finale.active{opacity:1}
+.butterfly-hand{position:absolute;left:50%;bottom:4vh;width:clamp(190px,52vw,330px);height:auto;transform:translate3d(-50%,30px,0) rotateX(5deg) rotateZ(-2deg) scale(.96);transform-origin:50% 100%;opacity:0;filter:drop-shadow(0 22px 26px rgba(0,0,0,.45)) drop-shadow(0 0 22px rgba(232,165,184,.18));will-change:transform,opacity}
+.butterfly-finale.active .butterfly-hand{animation:handReveal 1.8s cubic-bezier(.22,1,.36,1) .15s forwards}
+.hand-glow{position:absolute;left:50%;bottom:12vh;width:clamp(180px,48vw,320px);height:clamp(100px,22vw,170px);transform:translate3d(-50%,0,0) scale(.8);border-radius:50%;background:radial-gradient(ellipse,rgba(244,208,104,.16),rgba(232,165,184,.08) 42%,transparent 72%);filter:blur(18px);opacity:0;will-change:transform,opacity}
+.butterfly-finale.active .hand-glow{animation:handGlow 3.6s ease-out .45s forwards}
+.finale-butterfly{position:absolute;left:50%;top:-14%;width:clamp(96px,24vw,165px);height:auto;opacity:0;transform:translate3d(-50%,0,0) rotateZ(-8deg) rotateY(0deg) scale(.45);transform-style:preserve-3d;filter:drop-shadow(0 7px 12px rgba(0,0,0,.35)) drop-shadow(0 0 16px rgba(232,165,184,.35));will-change:transform,opacity,left,top}
+.butterfly-finale.active .finale-butterfly{animation:butterflyToHand 6.2s cubic-bezier(.2,.72,.24,1) .9s forwards}
+.final-wing{transform-box:fill-box;transform-origin:50% 50%;animation:realWingBeat .72s cubic-bezier(.37,0,.63,1) infinite alternate}
+.final-wing.right{animation-delay:-.08s}
+@keyframes realWingBeat{0%{transform:rotateY(8deg) rotateZ(-2deg) scaleX(.58)}100%{transform:rotateY(-10deg) rotateZ(2deg) scaleX(1)}}
+@keyframes handReveal{0%{opacity:0;transform:translate3d(-50%,30px,0) rotateX(8deg) rotateZ(-3deg) scale(.96)}100%{opacity:.98;transform:translate3d(-50%,0,0) rotateX(2deg) rotateZ(0deg) scale(1)}}
+@keyframes handGlow{0%{opacity:0;transform:translate3d(-50%,0,0) scale(.7)}35%{opacity:.9;transform:translate3d(-50%,0,0) scale(1)}100%{opacity:.48;transform:translate3d(-50%,0,0) scale(1.08)}}
+@keyframes butterflyToHand{
+0%{opacity:0;left:50%;top:-14%;transform:translate3d(-50%,0,0) rotateZ(-8deg) rotateY(0deg) scale(.45)}
+10%{opacity:1}25%{left:28%;top:22%;transform:translate3d(-50%,0,0) rotateZ(10deg) rotateY(-10deg) scale(.72)}
+43%{left:73%;top:39%;transform:translate3d(-50%,0,0) rotateZ(-8deg) rotateY(12deg) scale(.86)}
+59%{left:61%;top:57%;transform:translate3d(-50%,0,0) rotateZ(6deg) rotateY(-7deg) scale(.72)}
+74%{left:45%;top:69%;transform:translate3d(-50%,0,0) rotateZ(-3deg) rotateY(4deg) scale(.62)}
+88%{left:50%;top:75%;transform:translate3d(-50%,0,0) rotateZ(1deg) rotateY(0deg) scale(.56)}
+100%{opacity:1;left:50%;top:75%;transform:translate3d(-50%,0,0) rotateZ(0deg) rotateY(0deg) scale(.54)}
 }
-.butterfly-finale.active .finale-butterfly { animation-fill-mode:forwards; }
-
+/* One large butterfly leads her into the world */
+.world-opening{position:fixed;inset:0;z-index:1002;pointer-events:none;opacity:0;overflow:hidden;background:radial-gradient(circle at 50% 50%,rgba(24,19,39,.18),rgba(3,4,8,.72));perspective:1400px;contain:strict}
+.world-opening.active{opacity:1}
+.opening-butterfly{position:absolute;left:50%;top:54%;width:clamp(150px,42vw,290px);height:auto;transform:translate3d(-50%,-50%,0) scale(.18) rotateZ(-8deg);transform-style:preserve-3d;opacity:0;filter:drop-shadow(0 14px 20px rgba(0,0,0,.45)) drop-shadow(0 0 32px rgba(232,165,184,.42));will-change:transform,opacity,left,top}
+.world-opening.active .opening-butterfly{animation:openingFlight 3.9s cubic-bezier(.16,.76,.2,1) forwards}
+.opening-wing{transform-box:fill-box;transform-origin:50% 50%;animation:openingWing .62s cubic-bezier(.37,0,.63,1) infinite alternate}
+.opening-wing.right{animation-delay:-.09s}
+@keyframes openingWing{from{transform:rotateY(12deg) rotateZ(-2deg) scaleX(.55)}to{transform:rotateY(-12deg) rotateZ(2deg) scaleX(1)}}
+@keyframes openingFlight{0%{opacity:0;left:50%;top:56%;transform:translate3d(-50%,-50%,0) scale(.18) rotateZ(-8deg)}12%{opacity:1}42%{left:35%;top:43%;transform:translate3d(-50%,-50%,0) scale(.72) rotateZ(9deg)}70%{left:64%;top:33%;transform:translate3d(-50%,-50%,0) scale(1.08) rotateZ(-6deg)}100%{opacity:0;left:50%;top:-18%;transform:translate3d(-50%,-50%,0) scale(1.42) rotateZ(3deg)}}
+.opening-dust{position:absolute;left:50%;top:54%;width:8px;height:8px;border-radius:50%;background:rgba(244,208,104,.8);box-shadow:0 0 18px rgba(244,208,104,.7);opacity:0;animation:openingDust 3.2s ease-out .25s forwards}
+@keyframes openingDust{0%{opacity:0;transform:scale(.2)}20%{opacity:.7;transform:scale(1)}100%{opacity:0;transform:translate3d(0,-28vh,0) scale(.3)}}
 @media (max-width: 600px) {
       #finale {
         min-height: 100svh;
@@ -985,7 +995,16 @@
   </div>
 
   <!-- MAIN SCROLLABLE SITE CANVAS -->
-  <div id="site">
+  <div class="world-opening" id="worldOpening" aria-hidden="true">
+  <div class="opening-dust"></div>
+  <svg class="opening-butterfly" viewBox="0 0 220 170" aria-hidden="true">
+    <defs><linearGradient id="obPink" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe0ea"/><stop offset=".5" stop-color="#e88cab"/><stop offset="1" stop-color="#93466d"/></linearGradient><linearGradient id="obGold" x1="1" y1="0" x2="0" y2="1"><stop stop-color="#fff4b8"/><stop offset=".5" stop-color="#f4d068"/><stop offset="1" stop-color="#a96e2d"/></linearGradient></defs>
+    <g class="opening-wing"><path d="M105 78C84 34 35 10 21 33c-14 23 16 59 73 60-38 10-46 45-25 54 25 11 45-22 44-60Z" fill="url(#obPink)" opacity=".96"/></g>
+    <g class="opening-wing right"><path d="M115 78C136 34 185 10 199 33c14 23-16 59-73 60 38 10 46 45 25 54-25 11-45-22-44-60Z" fill="url(#obGold)" opacity=".96"/></g>
+    <path d="M109 64c-5 14-5 43 0 61" fill="none" stroke="#30202b" stroke-width="7" stroke-linecap="round"/><circle cx="109" cy="57" r="7" fill="#30202b"/><path d="M106 53c-9-13-15-16-20-17M113 53c9-13 15-16 20-17" fill="none" stroke="#30202b" stroke-width="2" stroke-linecap="round"/>
+  </svg>
+</div>
+<div id="site">
 
     <!-- SECTION 1: PROLOGUE -->
     <section class="section" id="prologue">
@@ -1334,12 +1353,18 @@
         if (experienceStarted) return;
         experienceStarted = true;
         if (headphoneGate) headphoneGate.classList.add('hidden');
-        if (site) {
-          site.classList.add('revealed');
-          site.style.pointerEvents = 'auto';
+        const opening = document.getElementById('worldOpening');
+        if (opening) {
+          opening.classList.add('active');
+          window.setTimeout(() => {
+            opening.classList.remove('active');
+            if (site) { site.classList.add('revealed'); site.style.pointerEvents = 'auto'; }
+            document.body.classList.add('experience-started');
+          }, 3000);
+        } else {
+          if (site) { site.classList.add('revealed'); site.style.pointerEvents = 'auto'; }
+          document.body.classList.add('experience-started');
         }
-        document.body.classList.add('experience-started');
-
         if (bgm && !isMuted) {
           const play = bgm.play();
           if (play && typeof play.catch === 'function') play.catch(() => {});
@@ -1509,18 +1534,17 @@
 
 <div class="butterfly-finale" id="butterflyFinale" aria-hidden="true">
   <div class="hand-glow"></div>
-  <svg class="butterfly-hand" viewBox="0 0 260 190" aria-hidden="true">
-    <defs><linearGradient id="handGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fffaf6"/><stop offset=".55" stop-color="#e8a5b8"/><stop offset="1" stop-color="#f4d068"/></linearGradient></defs>
-    <path d="M72 177c-17-19-24-42-18-63 5-18 18-30 31-38 7-4 12-1 12 6l-2 25 6 2 10-61c1-8 7-12 13-10 5 2 7 7 6 13l-5 52 6 1 13-71c1-7 7-11 13-9 6 2 8 7 7 13l-9 69 6 2 16-55c2-7 8-10 14-7 5 2 7 7 5 13l-13 53 7 3 11-32c2-6 8-8 13-5 5 2 6 7 4 13-7 24-14 46-25 61-15 21-37 31-65 32H72Z" fill="url(#handGrad)" opacity=".9"/>
-    <path d="M96 105c19 11 39 16 62 14" fill="none" stroke="rgba(255,250,246,.55)" stroke-width="2" stroke-linecap="round"/>
+  <svg class="butterfly-hand" viewBox="0 0 360 250" aria-hidden="true">
+    <defs><linearGradient id="skinGrad" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff4ef"/><stop offset=".38" stop-color="#f2c9c5"/><stop offset=".72" stop-color="#d99ca9"/><stop offset="1" stop-color="#b9778b"/></linearGradient></defs>
+    <path d="M72 236c-28-18-43-48-39-77 3-25 18-43 38-55 12-7 22-2 22 10l-4 33 9 3 12-79c1-10 9-17 18-15 9 2 12 10 11 19l-7 68 9 2 15-91c2-10 10-16 19-14 9 2 12 10 10 20l-11 89 10 3 18-70c2-9 10-14 19-11 8 3 11 11 8 20l-15 67 10 4 14-42c3-8 11-12 19-8 8 3 10 11 7 20-7 24-16 52-29 70-20 28-48 39-81 40H72Z" fill="url(#skinGrad)"/>
+    <path d="M64 222c30 11 63 12 96 4 30-8 51-25 66-48" fill="none" stroke="#fffaf6" stroke-width="5" stroke-linecap="round" opacity=".35"/>
+    <path d="M101 145c15 7 30 10 45 9M130 123c14 7 28 10 43 10M166 113c12 6 25 8 38 8" fill="none" stroke="#fffaf6" stroke-width="2" stroke-linecap="round" opacity=".28"/>
   </svg>
-  <svg class="finale-butterfly" viewBox="0 0 120 90" aria-hidden="true">
-    <g class="wing">
-      <path d="M58 42C42 11 10 4 14 27c2 13 17 22 38 19-16 12-12 35 2 31 11-3 14-17 8-31Z" fill="#e8a5b8" opacity=".9"/>
-      <path d="M62 42C78 11 110 4 106 27c-2 13-17 22-38 19 16 12 12 35-2 31-11-3-14-17-8-31Z" fill="#f4d068" opacity=".86"/>
-    </g>
-    <path d="M60 37v28" stroke="#fffaf6" stroke-width="3" stroke-linecap="round"/>
-    <circle cx="60" cy="34" r="3" fill="#fffaf6"/>
+  <svg class="finale-butterfly" viewBox="0 0 220 170" aria-hidden="true">
+    <defs><linearGradient id="fbPink" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffd9e5"/><stop offset=".48" stop-color="#e88cab"/><stop offset="1" stop-color="#a74f78"/></linearGradient><linearGradient id="fbGold" x1="1" y1="0" x2="0" y2="1"><stop stop-color="#fff3b0"/><stop offset=".48" stop-color="#f4d068"/><stop offset="1" stop-color="#b97936"/></linearGradient></defs>
+    <g class="final-wing"><path d="M105 78C84 34 35 10 21 33c-14 23 16 59 73 60-38 10-46 45-25 54 25 11 45-22 44-60Z" fill="url(#fbPink)" opacity=".94"/><path d="M96 82C65 67 45 58 25 52M96 87C66 92 47 99 34 111M91 74C69 49 58 38 47 34" fill="none" stroke="#fffaf6" stroke-width="1.5" opacity=".38"/></g>
+    <g class="final-wing right"><path d="M115 78C136 34 185 10 199 33c14 23-16 59-73 60 38 10 46 45 25 54-25 11-45-22-44-60Z" fill="url(#fbGold)" opacity=".94"/><path d="M124 82c31-15 51-24 71-30M124 87c30 5 49 12 62 24M129 74c22-25 33-36 44-40" fill="none" stroke="#fffdf0" stroke-width="1.5" opacity=".38"/></g>
+    <path d="M109 64c-5 14-5 43 0 61" fill="none" stroke="#30202b" stroke-width="7" stroke-linecap="round"/><circle cx="109" cy="57" r="7" fill="#30202b"/><path d="M106 53c-9-13-15-16-20-17M113 53c9-13 15-16 20-17" fill="none" stroke="#30202b" stroke-width="2" stroke-linecap="round"/>
   </svg>
 </div>
 
