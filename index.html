@@ -854,6 +854,48 @@
       50% { transform:translateY(-7px); }
     }
 
+    /* Big YES fireworks */
+    .fireworks {
+      position: fixed;
+      inset: 0;
+      z-index: 997;
+      pointer-events: none;
+      opacity: 0;
+      overflow: hidden;
+    }
+    .fireworks.active { opacity: 1; }
+    .firework {
+      position: absolute;
+      left: var(--fx);
+      top: var(--fy);
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent-gold);
+      box-shadow: 0 0 14px var(--accent-gold), 0 0 30px var(--accent-rose);
+      animation: fireworkCore 1.9s cubic-bezier(.15,.75,.25,1) forwards;
+      animation-delay: var(--fd);
+    }
+    .firework::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 50%;
+      box-shadow: 0 0 0 0 rgba(244,208,104,.95), 0 0 0 0 rgba(232,165,184,.9);
+      animation: fireworkRing 1.9s ease-out forwards;
+      animation-delay: var(--fd);
+    }
+    @keyframes fireworkCore {
+      0% { opacity: 0; transform: scale(.1); }
+      12% { opacity: 1; transform: scale(1.5); }
+      100% { opacity: 0; transform: scale(7); }
+    }
+    @keyframes fireworkRing {
+      0% { opacity: 1; transform: scale(.2); box-shadow: 0 0 0 0 rgba(244,208,104,.95), 0 0 0 0 rgba(232,165,184,.8); }
+      55% { opacity: .9; transform: scale(5); box-shadow: 0 0 0 18px rgba(244,208,104,.5), 0 0 0 36px rgba(232,165,184,.28); }
+      100% { opacity: 0; transform: scale(10); box-shadow: 0 0 0 42px rgba(244,208,104,0), 0 0 0 78px rgba(232,165,184,0); }
+    }
+
     .celebration-burst {
       position: fixed;
       inset: 0;
@@ -1287,6 +1329,15 @@
 
       let isMuted = false;
       let experienceStarted = false;
+      let currentAudio = 'bgm';
+      let proposalComplete = false;
+
+      // Keep the main song continuous. It loops from the beginning whenever it reaches the end.
+      if (bgm) {
+        bgm.loop = true;
+        bgm.volume = 0.32;
+      }
+      if (celebrate) celebrate.volume = 0.72;
 
       // Reveal the main experience. Nothing here is allowed to block the page.
       function enterExperience() {
@@ -1322,34 +1373,55 @@
       if (muteToggle) {
         muteToggle.addEventListener('click', () => {
           isMuted = !isMuted;
-          if (bgm) {
-            bgm.muted = isMuted;
-            if (isMuted) bgm.pause();
-            else {
-              const p = bgm.play();
+          if (bgm) bgm.muted = isMuted;
+          if (celebrate) celebrate.muted = isMuted;
+
+          if (isMuted) {
+            if (bgm) bgm.pause();
+            if (celebrate) celebrate.pause();
+          } else {
+            const activeAudio = currentAudio === 'celebrate' ? celebrate : bgm;
+            if (activeAudio) {
+              const p = activeAudio.play();
               if (p && typeof p.catch === 'function') p.catch(() => {});
             }
           }
+
           muteToggle.textContent = isMuted ? '🔇' : '♫';
           muteToggle.setAttribute('aria-label', isMuted ? 'Unmute music' : 'Mute music');
+          muteToggle.setAttribute('aria-pressed', String(isMuted));
         });
       }
 
-      // Proposal moment: stop the BGM, play the celebration track once,
-      // show the finale animation, and only then continue to the final chapter.
+      // Proposal moment: celebration song plays first. When it finishes,
+      // the main love song comes back quietly and keeps looping forever.
       async function celebrateYes() {
+        if (proposalComplete) return;
+        proposalComplete = true;
+        currentAudio = 'celebrate';
+
         if (window.__shaaluLoveBurst) window.__shaaluLoveBurst();
+        if (window.__shaaluFireworks) window.__shaaluFireworks();
+
         if (bgm) {
-          try { bgm.pause(); bgm.currentTime = 0; } catch (_) {}
+          try { bgm.pause(); bgm.currentTime = 0; bgm.volume = 0.16; } catch (_) {}
         }
 
-        if (celebrate) {
+        let celebrationStarted = false;
+        if (celebrate && !isMuted) {
           try {
             celebrate.currentTime = 0;
             celebrate.loop = false;
             const p = celebrate.play();
-            if (p && typeof p.catch === 'function') p.catch(() => {});
-          } catch (_) {}
+            celebrationStarted = true;
+            if (p && typeof p.catch === 'function') {
+              p.catch(() => resumeMainSong());
+            }
+          } catch (_) {
+            resumeMainSong();
+          }
+        } else {
+          resumeMainSong();
         }
 
         if (celebrate) {
@@ -1364,6 +1436,26 @@
             setTimeout(() => finale.scrollIntoView({behavior:'smooth', block:'start'}), 100);
           });
         }
+
+        function resumeMainSong() {
+          if (currentAudio !== 'celebrate') return;
+          currentAudio = 'bgm';
+          if (celebrate) celebrate.pause();
+          if (bgm) {
+            bgm.loop = true;
+            bgm.volume = 0.16;
+            if (!isMuted) {
+              const p = bgm.play();
+              if (p && typeof p.catch === 'function') p.catch(() => {});
+            }
+          }
+        }
+
+        if (celebrate) {
+          celebrate.addEventListener('ended', resumeMainSong, {once:true});
+        }
+        // If the celebration track cannot start, never leave her in silence.
+        if (!celebrationStarted && !isMuted) resumeMainSong();
       }
 
       if (yesBtn) yesBtn.addEventListener('click', celebrateYes);
@@ -1433,10 +1525,14 @@
       burst.className = 'celebration-burst';
       document.body.appendChild(burst);
 
+      const fireworks = document.createElement('div');
+      fireworks.className = 'fireworks';
+      document.body.appendChild(fireworks);
+
       // Preserve the original butterfly system, while filling the sky with a
       // larger number of independently timed, gently drifting butterflies.
       if (butterflyLayer) {
-        const count = window.innerWidth < 600 ? 5 : 8;
+        const count = window.innerWidth < 600 ? 9 : 15;
         const wing = '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M31 31C18 8 2 10 8 25c4 10 13 12 22 8C19 48 25 62 32 39c7 23 13 9 2-6 9 4 18 2 22-8C62 10 46 8 33 31Z" fill="none" stroke="rgba(232,165,184,.92)" stroke-width="1.7"/><path d="M32 28v13" stroke="rgba(244,208,104,.8)" stroke-width="1.2"/></svg>';
         for (let i = 0; i < count; i++) {
           const b = document.createElement('div');
