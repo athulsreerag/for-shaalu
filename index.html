@@ -854,47 +854,14 @@
       50% { transform:translateY(-7px); }
     }
 
-    /* Big YES fireworks */
-    .fireworks {
-      position: fixed;
-      inset: 0;
-      z-index: 997;
-      pointer-events: none;
-      opacity: 0;
-      overflow: hidden;
-    }
+    /* Big cinematic YES fireworks */
+    .fireworks { position: fixed; inset: 0; z-index: 997; pointer-events: none; opacity: 0; overflow: hidden; transition: opacity .2s ease; }
     .fireworks.active { opacity: 1; }
-    .firework {
-      position: absolute;
-      left: var(--fx);
-      top: var(--fy);
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--accent-gold);
-      box-shadow: 0 0 14px var(--accent-gold), 0 0 30px var(--accent-rose);
-      animation: fireworkCore 1.9s cubic-bezier(.15,.75,.25,1) forwards;
-      animation-delay: var(--fd);
-    }
-    .firework::before {
-      content: '';
-      position: absolute;
-      inset: -2px;
-      border-radius: 50%;
-      box-shadow: 0 0 0 0 rgba(244,208,104,.95), 0 0 0 0 rgba(232,165,184,.9);
-      animation: fireworkRing 1.9s ease-out forwards;
-      animation-delay: var(--fd);
-    }
-    @keyframes fireworkCore {
-      0% { opacity: 0; transform: scale(.1); }
-      12% { opacity: 1; transform: scale(1.5); }
-      100% { opacity: 0; transform: scale(7); }
-    }
-    @keyframes fireworkRing {
-      0% { opacity: 1; transform: scale(.2); box-shadow: 0 0 0 0 rgba(244,208,104,.95), 0 0 0 0 rgba(232,165,184,.8); }
-      55% { opacity: .9; transform: scale(5); box-shadow: 0 0 0 18px rgba(244,208,104,.5), 0 0 0 36px rgba(232,165,184,.28); }
-      100% { opacity: 0; transform: scale(10); box-shadow: 0 0 0 42px rgba(244,208,104,0), 0 0 0 78px rgba(232,165,184,0); }
-    }
+    .firework { position:absolute; left:var(--fx); top:var(--fy); width:var(--fs,4px); height:var(--fs,4px); border-radius:50%; background:var(--fc,var(--accent-gold)); box-shadow:0 0 7px var(--fc,var(--accent-gold)),0 0 18px var(--fc,var(--accent-gold)),0 0 28px rgba(255,255,255,.55); animation:fireworkTravel var(--ft,2.2s) cubic-bezier(.12,.72,.2,1) forwards; animation-delay:var(--fd,0s); will-change:transform,opacity; }
+    .firework::after { content:''; position:absolute; inset:0; border-radius:50%; background:inherit; filter:blur(2px); opacity:.8; transform:scale(2.4); }
+    @keyframes fireworkTravel { 0%{opacity:0;transform:translate(0,0) scale(.15)} 8%{opacity:1;transform:translate(0,0) scale(1.5)} 58%{opacity:1;transform:translate(var(--dx),var(--dy)) scale(1)} 100%{opacity:0;transform:translate(calc(var(--dx)*1.16),calc(var(--dy)*1.16)) scale(.15)} }
+    .firework-burst { position:absolute; left:var(--fx); top:var(--fy); width:18px; height:18px; border-radius:50%; transform:translate(-50%,-50%) scale(.1); background:radial-gradient(circle,#fff 0 4%,rgba(244,208,104,.9) 10%,rgba(232,165,184,.4) 28%,transparent 70%); animation:burstFlash 1.5s ease-out forwards; animation-delay:var(--fd,0s); }
+    @keyframes burstFlash { 0%{opacity:0;transform:translate(-50%,-50%) scale(.1)} 12%{opacity:1;transform:translate(-50%,-50%) scale(4)} 35%{opacity:.75;transform:translate(-50%,-50%) scale(7)} 100%{opacity:0;transform:translate(-50%,-50%) scale(11)} }
 
     .celebration-burst {
       position: fixed;
@@ -1532,7 +1499,7 @@
       // Preserve the original butterfly system, while filling the sky with a
       // larger number of independently timed, gently drifting butterflies.
       if (butterflyLayer) {
-        const count = window.innerWidth < 600 ? 9 : 15;
+        const count = window.innerWidth < 600 ? 16 : 24;
         const wing = '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M31 31C18 8 2 10 8 25c4 10 13 12 22 8C19 48 25 62 32 39c7 23 13 9 2-6 9 4 18 2 22-8C62 10 46 8 33 31Z" fill="none" stroke="rgba(232,165,184,.92)" stroke-width="1.7"/><path d="M32 28v13" stroke="rgba(244,208,104,.8)" stroke-width="1.2"/></svg>';
         for (let i = 0; i < count; i++) {
           const b = document.createElement('div');
@@ -1611,6 +1578,55 @@
           });
         }, {passive:true});
       }
+
+      // Large multi-burst fireworks for the final YES moment.
+      window.__shaaluFireworks = function () {
+        if (!fireworks) return;
+        fireworks.innerHTML = '';
+        fireworks.classList.add('active');
+        const mobile = window.innerWidth < 600;
+        const bursts = mobile ? 8 : 13;
+        const sparksPerBurst = mobile ? 26 : 38;
+        const colors = ['#f4d068','#e8a5b8','#ff6f91','#fff4cf','#ffffff'];
+        for (let b=0; b<bursts; b++) {
+          const cx=8+Math.random()*84, cy=10+Math.random()*57;
+          const delay=b*(mobile?.16:.12)+Math.random()*.12;
+          const flash=document.createElement('span');
+          flash.className='firework-burst';
+          flash.style.setProperty('--fx',cx+'%'); flash.style.setProperty('--fy',cy+'%'); flash.style.setProperty('--fd',delay+'s');
+          fireworks.appendChild(flash);
+          for(let i=0;i<sparksPerBurst;i++){
+            const spark=document.createElement('span'); spark.className='firework';
+            const angle=Math.PI*2*i/sparksPerBurst+(Math.random()-.5)*.08;
+            const distance=(mobile?45:62)+Math.random()*(mobile?55:85);
+            spark.style.setProperty('--fx',cx+'%'); spark.style.setProperty('--fy',cy+'%');
+            spark.style.setProperty('--dx',Math.cos(angle)*distance+'px'); spark.style.setProperty('--dy',Math.sin(angle)*distance+'px');
+            spark.style.setProperty('--fd',delay+Math.random()*.12+'s'); spark.style.setProperty('--ft',1.9+Math.random()*.75+'s');
+            spark.style.setProperty('--fs',3+Math.random()*4.5+'px'); spark.style.setProperty('--fc',colors[Math.floor(Math.random()*colors.length)]);
+            fireworks.appendChild(spark);
+          }
+        }
+        setTimeout(()=>{
+          if(!fireworks.classList.contains('active')) return;
+          const wave=mobile?5:8;
+          for(let b=0;b<wave;b++){
+            const cx=8+Math.random()*84, cy=10+Math.random()*55, delay=Math.random()*.25;
+            const flash=document.createElement('span'); flash.className='firework-burst';
+            flash.style.setProperty('--fx',cx+'%'); flash.style.setProperty('--fy',cy+'%'); flash.style.setProperty('--fd',delay+'s'); fireworks.appendChild(flash);
+            const n=mobile?22:32;
+            for(let i=0;i<n;i++){
+              const spark=document.createElement('span'); spark.className='firework';
+              const angle=Math.PI*2*i/n+Math.random()*.08, distance=50+Math.random()*80;
+              spark.style.setProperty('--fx',cx+'%'); spark.style.setProperty('--fy',cy+'%');
+              spark.style.setProperty('--dx',Math.cos(angle)*distance+'px'); spark.style.setProperty('--dy',Math.sin(angle)*distance+'px');
+              spark.style.setProperty('--fd',delay+Math.random()*.1+'s'); spark.style.setProperty('--ft',1.7+Math.random()*.65+'s');
+              spark.style.setProperty('--fs',3+Math.random()*4+'px'); spark.style.setProperty('--fc',colors[Math.floor(Math.random()*colors.length)]);
+              fireworks.appendChild(spark);
+            }
+          }
+        },1150);
+        setTimeout(()=>{ fireworks.classList.remove('active'); fireworks.innerHTML=''; },6000);
+      };
 
       // The YES moment gets a burst of hearts/butterflies without changing the story text.
       function launchLoveBurst() {
