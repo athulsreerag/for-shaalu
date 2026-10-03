@@ -925,8 +925,26 @@
       }
     }
   </style>
+<style id="shaalu-final-polish">
+/* Final smoothness pass: subtle fireflies, fewer expensive effects, no opening butterfly. */
+.world-opening{display:none!important}
+.firefly-layer{position:fixed;inset:0;z-index:3;pointer-events:none;overflow:hidden;contain:strict}
+.firefly{position:absolute;width:4px;height:4px;border-radius:50%;background:rgba(255,244,190,.95);box-shadow:0 0 7px rgba(244,208,104,.7);opacity:0;will-change:transform,opacity;animation:fireflyFloat var(--ff-time) ease-in-out var(--ff-delay) infinite}
+@keyframes fireflyFloat{
+  0%,100%{opacity:0;transform:translate3d(0,10px,0) scale(.65)}
+  18%,72%{opacity:.78}
+  45%{opacity:1;transform:translate3d(var(--ff-x),var(--ff-y),0) scale(1)}
+}
+@media (max-width:600px){
+  .firefly{width:3px;height:3px;box-shadow:0 0 5px rgba(244,208,104,.65)}
+}
+@media (prefers-reduced-motion:reduce){
+  .firefly{animation:none;opacity:.45}
+}
+</style>
 </head>
 <body>
+<div class="firefly-layer" id="fireflies" aria-hidden="true"></div>
 
   <!-- Custom Micro Cursors -->
   <div class="custom-cursor" id="cursor"></div>
@@ -1348,17 +1366,9 @@
         experienceStarted = true;
         if (headphoneGate) headphoneGate.classList.add('hidden');
         const opening = document.getElementById('worldOpening');
-        if (opening) {
-          opening.classList.add('active');
-          window.setTimeout(() => {
-            opening.classList.remove('active');
-            if (site) { site.classList.add('revealed'); site.style.pointerEvents = 'auto'; }
-            document.body.classList.add('experience-started');
-          }, 3450);
-        } else {
-          if (site) { site.classList.add('revealed'); site.style.pointerEvents = 'auto'; }
-          document.body.classList.add('experience-started');
-        }
+        if (opening) opening.classList.remove('active');
+        if (site) { site.classList.add('revealed'); site.style.pointerEvents = 'auto'; }
+        document.body.classList.add('experience-started');
         if (bgm && !isMuted) {
           const play = bgm.play();
           if (play && typeof play.catch === 'function') play.catch(() => {});
@@ -1550,7 +1560,7 @@
       // Preserve the original butterfly system, while filling the sky with a
       // larger number of independently timed, gently drifting butterflies.
       if (butterflyLayer) {
-        const count = window.innerWidth < 600 ? 7 : 11;
+        const count = window.innerWidth < 600 ? 6 : 10;
         const wing = '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M31 31C18 8 2 10 8 25c4 10 13 12 22 8C19 48 25 62 32 39c7 23 13 9 2-6 9 4 18 2 22-8C62 10 46 8 33 31Z" fill="none" stroke="rgba(232,165,184,.92)" stroke-width="1.7"/><path d="M32 28v13" stroke="rgba(244,208,104,.8)" stroke-width="1.2"/></svg>';
         for (let i = 0; i < count; i++) {
           const b = document.createElement('div');
@@ -1563,6 +1573,23 @@
           b.style.setProperty('--fly-delay', (-Math.random() * 18).toFixed(1) + 's');
           b.style.transform = 'scale(' + (.55 + Math.random() * .7).toFixed(2) + ')';
           butterflyLayer.appendChild(b);
+        }
+      }
+
+      // Soft fireflies: a small number, transform/opacity only, designed for smooth phones.
+      const fireflyLayer = document.getElementById('fireflies');
+      if (fireflyLayer) {
+        const fireflyCount = window.innerWidth < 600 ? 10 : 18;
+        for (let i = 0; i < fireflyCount; i++) {
+          const f = document.createElement('span');
+          f.className = 'firefly';
+          f.style.left = (5 + Math.random() * 90) + 'vw';
+          f.style.top = (12 + Math.random() * 78) + 'vh';
+          f.style.setProperty('--ff-x', ((Math.random() - .5) * 80) + 'px');
+          f.style.setProperty('--ff-y', ((Math.random() - .5) * 110) + 'px');
+          f.style.setProperty('--ff-time', (4.5 + Math.random() * 4.5).toFixed(2) + 's');
+          f.style.setProperty('--ff-delay', (-Math.random() * 8).toFixed(2) + 's');
+          fireflyLayer.appendChild(f);
         }
       }
 
@@ -1630,7 +1657,7 @@
         }, {passive:true});
       }
 
-      // Oversized multi-burst fireworks for the final YES moment.
+      // Smooth 8-second multi-burst fireworks for the final YES moment.
       window.__shaaluFireworks = function () {
         if (!fireworks) return;
 
@@ -1642,11 +1669,11 @@
         const colors = ['#f4d068','#e8a5b8','#ff6f91','#fff4cf','#ffffff'];
 
         // Bigger explosions with a bounded particle count for smooth phones.
-        const burstsPerWave = reduced ? 1 : 2;
+        const burstsPerWave = reduced ? 1 : (mobile ? 2 : 3);
         const sparksPerBurst = reduced ? 8 : (mobile ? 12 : 16);
         const waveCount = reduced ? 1 : 4;
-        const waveGap = mobile ? 900 : 950;
-        const totalDuration = reduced ? 2200 : 5200;
+        const waveGap = mobile ? 1650 : 1700;
+        const totalDuration = reduced ? 2200 : 8000;
         const distanceMin = mobile ? 48 : 62;
         const distanceRange = mobile ? 58 : 78;
 
@@ -1686,7 +1713,7 @@
           }
 
           const createdNodes = Array.from(fireworks.childNodes).slice(before);
-          setTimeout(() => createdNodes.forEach(node => node.remove()), mobile ? 2200 : 2500);
+          setTimeout(() => createdNodes.forEach(node => node.remove()), mobile ? 2850 : 3050);
         };
 
         if (reduced) {
@@ -1708,7 +1735,7 @@
           finaleLayer.classList.remove('active');
           void finaleLayer.offsetWidth;
           setTimeout(() => finaleLayer.classList.add('active'), 120);
-          setTimeout(() => finaleLayer.classList.remove('active'), 6500);
+          setTimeout(() => finaleLayer.classList.remove('active'), 7900);
         }
       };
 
@@ -1735,5 +1762,13 @@
     })();
   </script>
 
+<style id="shaalu-motion-tuning">
+/* Keep the visual richness without stacking expensive effects on mobile. */
+@media (max-width:600px){
+  .timeline-card,.promise-card,.gallery-item,.letter-content{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  .butterfly{opacity:.52}
+  .butterfly svg{animation-duration:1.15s}
+}
+</style>
 </body>
 </html>
