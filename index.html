@@ -1467,16 +1467,74 @@
         };
 
         let celebrationStarted = false;
+        let celebrationBlendStarted = false;
+        let celebrationBlendTimer = null;
+
+        const startCelebrate2Blend = () => {
+          if (celebrationBlendStarted || currentAudio !== 'celebrate' || !celebrate2) return;
+          celebrationBlendStarted = true;
+          if (celebrationBlendTimer) {
+            clearInterval(celebrationBlendTimer);
+            celebrationBlendTimer = null;
+          }
+
+          currentAudio = 'celebrate2';
+          celebrate2.currentTime = 0;
+          celebrate2.loop = false;
+          celebrate2.muted = isMuted;
+          celebrate2.addEventListener('ended', resumeMainSong, {once:true});
+
+          if (!isMuted) {
+            const p = celebrate2.play();
+            if (p && typeof p.catch === 'function') p.catch(() => resumeMainSong());
+          }
+
+          // Crossfade the final ~2 seconds of celebrate.mp3 into celebrate2.mp3.
+          const startVolume = celebrate ? celebrate.volume : 0.72;
+          const fadeStart = performance.now();
+          const fadeDuration = 2000;
+          const fade = (now) => {
+            if (!celebrate) return;
+            const progress = Math.min(1, (now - fadeStart) / fadeDuration);
+            celebrate.volume = Math.max(0, startVolume * (1 - progress));
+            if (progress < 1 && currentAudio === 'celebrate2') {
+              requestAnimationFrame(fade);
+            } else {
+              celebrate.volume = 0;
+            }
+          };
+          requestAnimationFrame(fade);
+        };
+
         if (celebrate && !isMuted) {
           try {
             celebrate.currentTime = 0;
             celebrate.loop = false;
+            celebrate.volume = 0.72;
             celebrate.addEventListener('ended', playCelebrate2, {once:true});
             const p = celebrate.play();
             celebrationStarted = true;
             if (p && typeof p.catch === 'function') {
               p.catch(() => playCelebrate2());
             }
+
+            // Start celebrate2 about 2 seconds before celebrate.mp3 ends.
+            const watchBlend = () => {
+              if (!celebrate || celebrationBlendStarted || currentAudio !== 'celebrate') return;
+              const remaining = celebrate.duration - celebrate.currentTime;
+              if (Number.isFinite(remaining) && remaining <= 2) {
+                startCelebrate2Blend();
+              }
+            };
+            celebrationBlendTimer = setInterval(watchBlend, 100);
+            celebrate.addEventListener('timeupdate', watchBlend);
+            celebrate.addEventListener('ended', () => {
+              if (celebrationBlendTimer) {
+                clearInterval(celebrationBlendTimer);
+                celebrationBlendTimer = null;
+              }
+              if (!celebrationBlendStarted) playCelebrate2();
+            }, {once:true});
           } catch (_) {
             playCelebrate2();
           }
