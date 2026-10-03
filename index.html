@@ -959,6 +959,7 @@
   <!-- Audio System -->
   <audio id="bgm" src="audio/bgm.mp3" loop preload="auto"></audio>
   <audio id="celebrate" src="audio/celebrate.mp3" preload="auto"></audio>
+<audio id="celebrate2" src="audio/celebrate2.mp3" preload="auto"></audio>
 
   <!-- Mute Switch -->
   <button id="muteToggle" aria-label="Toggle music">🔊</button>
@@ -1347,6 +1348,7 @@
       const saveThoughtsBtn = $('saveThoughtsBtn');
       const copyThoughtsBtn = $('copyThoughtsBtn');
       const celebrate = $('celebrate');
+      const celebrate2 = $('celebrate2');
 
       let isMuted = false;
       let experienceStarted = false;
@@ -1359,6 +1361,7 @@
         bgm.volume = 0.32;
       }
       if (celebrate) celebrate.volume = 0.72;
+      if (celebrate2) celebrate2.volume = 0.72;
 
       // Reveal the main experience. Nothing here is allowed to block the page.
       function enterExperience() {
@@ -1394,12 +1397,14 @@
           isMuted = !isMuted;
           if (bgm) bgm.muted = isMuted;
           if (celebrate) celebrate.muted = isMuted;
+          if (celebrate2) celebrate2.muted = isMuted;
 
           if (isMuted) {
             if (bgm) bgm.pause();
             if (celebrate) celebrate.pause();
+            if (celebrate2) celebrate2.pause();
           } else {
-            const activeAudio = currentAudio === 'celebrate' ? celebrate : bgm;
+            const activeAudio = currentAudio === 'celebrate2' ? celebrate2 : (currentAudio === 'celebrate' ? celebrate : bgm);
             if (activeAudio) {
               const p = activeAudio.play();
               if (p && typeof p.catch === 'function') p.catch(() => {});
@@ -1412,8 +1417,8 @@
         });
       }
 
-      // Proposal moment: celebration song plays first. When it finishes,
-      // the main love song comes back quietly and keeps looping forever.
+      // Proposal moment: celebrate.mp3 plays first, then celebrate2.mp3,
+      // then the main love song returns quietly and keeps looping forever.
       async function celebrateYes() {
         if (proposalComplete) return;
         proposalComplete = true;
@@ -1426,21 +1431,57 @@
           try { bgm.pause(); bgm.currentTime = 0; bgm.volume = 0.16; } catch (_) {}
         }
 
+        const resumeMainSong = () => {
+          if (currentAudio !== 'celebrate2' && currentAudio !== 'celebrate') return;
+          currentAudio = 'bgm';
+          if (celebrate) celebrate.pause();
+          if (celebrate2) celebrate2.pause();
+          if (bgm) {
+            bgm.loop = true;
+            bgm.volume = 0.16;
+            if (!isMuted) {
+              const p = bgm.play();
+              if (p && typeof p.catch === 'function') p.catch(() => {});
+            }
+          }
+        };
+
+        const playCelebrate2 = () => {
+          if (currentAudio !== 'celebrate') return;
+          currentAudio = 'celebrate2';
+
+          if (celebrate2) {
+            celebrate2.currentTime = 0;
+            celebrate2.loop = false;
+            celebrate2.muted = isMuted;
+            celebrate2.addEventListener('ended', resumeMainSong, {once:true});
+            if (!isMuted) {
+              const p = celebrate2.play();
+              if (p && typeof p.catch === 'function') p.catch(() => resumeMainSong());
+            } else {
+              resumeMainSong();
+            }
+          } else {
+            resumeMainSong();
+          }
+        };
+
         let celebrationStarted = false;
         if (celebrate && !isMuted) {
           try {
             celebrate.currentTime = 0;
             celebrate.loop = false;
+            celebrate.addEventListener('ended', playCelebrate2, {once:true});
             const p = celebrate.play();
             celebrationStarted = true;
             if (p && typeof p.catch === 'function') {
-              p.catch(() => resumeMainSong());
+              p.catch(() => playCelebrate2());
             }
           } catch (_) {
-            resumeMainSong();
+            playCelebrate2();
           }
         } else {
-          resumeMainSong();
+          playCelebrate2();
         }
 
         if (celebrate) {
@@ -1456,25 +1497,8 @@
           });
         }
 
-        function resumeMainSong() {
-          if (currentAudio !== 'celebrate') return;
-          currentAudio = 'bgm';
-          if (celebrate) celebrate.pause();
-          if (bgm) {
-            bgm.loop = true;
-            bgm.volume = 0.16;
-            if (!isMuted) {
-              const p = bgm.play();
-              if (p && typeof p.catch === 'function') p.catch(() => {});
-            }
-          }
-        }
-
-        if (celebrate) {
-          celebrate.addEventListener('ended', resumeMainSong, {once:true});
-        }
-        // If the celebration track cannot start, never leave her in silence.
-        if (!celebrationStarted && !isMuted) resumeMainSong();
+        // If the first celebration track cannot start, move directly to celebrate2.
+        if (!celebrationStarted && !isMuted) playCelebrate2();
       }
 
       if (yesBtn) yesBtn.addEventListener('click', celebrateYes);
