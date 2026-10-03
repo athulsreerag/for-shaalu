@@ -854,51 +854,40 @@
       50% { transform:translateY(-7px); }
     }
 
-    /* Big cinematic YES fireworks */
-    .fireworks { position: fixed; inset: 0; z-index: 997; pointer-events: none; opacity: 0; overflow: hidden; transition: opacity .2s ease; }
-    .fireworks.active { opacity: 1; }
-    .firework { position:absolute; left:var(--fx); top:var(--fy); width:var(--fs,4px); height:var(--fs,4px); border-radius:50%; background:var(--fc,var(--accent-gold)); box-shadow:0 0 7px var(--fc,var(--accent-gold)),0 0 18px var(--fc,var(--accent-gold)),0 0 28px rgba(255,255,255,.55); animation:fireworkTravel var(--ft,2.2s) cubic-bezier(.12,.72,.2,1) forwards; animation-delay:var(--fd,0s); will-change:transform,opacity; }
-    .firework::after { content:''; position:absolute; inset:0; border-radius:50%; background:inherit; filter:blur(2px); opacity:.8; transform:scale(2.4); }
-    @keyframes fireworkTravel { 0%{opacity:0;transform:translate(0,0) scale(.15)} 8%{opacity:1;transform:translate(0,0) scale(1.5)} 58%{opacity:1;transform:translate(var(--dx),var(--dy)) scale(1)} 100%{opacity:0;transform:translate(calc(var(--dx)*1.16),calc(var(--dy)*1.16)) scale(.15)} }
-    .firework-burst { position:absolute; left:var(--fx); top:var(--fy); width:18px; height:18px; border-radius:50%; transform:translate(-50%,-50%) scale(.1); background:radial-gradient(circle,#fff 0 4%,rgba(244,208,104,.9) 10%,rgba(232,165,184,.4) 28%,transparent 70%); animation:burstFlash 1.5s ease-out forwards; animation-delay:var(--fd,0s); }
-    @keyframes burstFlash { 0%{opacity:0;transform:translate(-50%,-50%) scale(.1)} 12%{opacity:1;transform:translate(-50%,-50%) scale(4)} 35%{opacity:.75;transform:translate(-50%,-50%) scale(7)} 100%{opacity:0;transform:translate(-50%,-50%) scale(11)} }
+    /* Big cinematic YES fireworks — oversized, full-screen, performance bounded */
+.fireworks { position:fixed; inset:0; z-index:997; pointer-events:none; opacity:0; overflow:hidden; transition:opacity .22s ease; contain:strict; transform:translateZ(0); }
+.fireworks.active { opacity:1; }
+.firework { position:absolute; left:var(--fx); top:var(--fy); width:var(--fs,5px); height:var(--fs,5px); border-radius:50%; background:var(--fc,var(--accent-gold)); box-shadow:0 0 8px var(--fc,var(--accent-gold)),0 0 22px var(--fc,var(--accent-gold)),0 0 42px rgba(255,255,255,.5); animation:fireworkTravel var(--ft,2.45s) cubic-bezier(.12,.72,.2,1) forwards; animation-delay:var(--fd,0s); will-change:transform,opacity; }
+.firework::after { content:''; position:absolute; inset:0; border-radius:50%; background:inherit; opacity:.72; transform:scale(2.2); }
+@keyframes fireworkTravel { 0%{opacity:0;transform:translate(0,0) scale(.1)} 8%{opacity:1;transform:translate(0,0) scale(2)} 56%{opacity:1;transform:translate(var(--dx),var(--dy)) scale(1.05)} 100%{opacity:0;transform:translate(calc(var(--dx)*1.18),calc(var(--dy)*1.18)) scale(.08)} }
+.firework-burst { position:absolute; left:var(--fx); top:var(--fy); width:28px; height:28px; border-radius:50%; transform:translate(-50%,-50%) scale(.08); background:radial-gradient(circle,#fff 0 5%,rgba(244,208,104,.98) 12%,rgba(232,165,184,.5) 30%,transparent 72%); animation:burstFlash 1.65s ease-out forwards; animation-delay:var(--fd,0s); will-change:transform,opacity; }
+@keyframes burstFlash { 0%{opacity:0;transform:translate(-50%,-50%) scale(.08)} 10%{opacity:1;transform:translate(-50%,-50%) scale(5)} 34%{opacity:.8;transform:translate(-50%,-50%) scale(9)} 100%{opacity:0;transform:translate(-50%,-50%) scale(15)} }
 
-    .celebration-burst {
-      position: fixed;
-      inset: 0;
-      z-index: 998;
-      pointer-events: none;
-      opacity: 0;
-    }
-    .celebration-burst.active { opacity: 1; }
-    .burst-heart {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      font-size: clamp(18px, 4vw, 34px);
-      transform: translate(-50%,-50%);
-      opacity: 0;
-      animation: heartBurst var(--burst-time, 2.8s) cubic-bezier(.12,.8,.25,1) forwards;
-      animation-delay: var(--burst-delay, 0s);
-    }
-    @keyframes heartBurst {
-      0% { opacity:0; transform:translate(-50%,-50%) scale(.2) rotate(0); }
-      12% { opacity:1; }
-      100% { opacity:0; transform:translate(calc(-50% + var(--bx)),calc(-50% + var(--by))) scale(1.25) rotate(var(--br)); }
-    }
+/* One final magical butterfly lands on an open hand after the fireworks */
+.butterfly-finale { position:fixed; inset:0; z-index:998; pointer-events:none; opacity:0; overflow:hidden; }
+.butterfly-finale.active { opacity:1; }
+.butterfly-hand { position:absolute; left:50%; bottom:7vh; width:clamp(150px,34vw,230px); height:auto; transform:translateX(-50%) translateY(35px) scale(.92); opacity:0; filter:drop-shadow(0 0 18px rgba(232,165,184,.28)); }
+.butterfly-finale.active .butterfly-hand { animation:handReveal 1.4s cubic-bezier(.22,1,.36,1) .25s forwards; }
+.hand-glow { position:absolute; left:50%; bottom:17vh; width:clamp(130px,30vw,210px); height:clamp(90px,20vw,150px); transform:translateX(-50%) scale(.6); border-radius:50%; background:radial-gradient(ellipse,rgba(244,208,104,.18),rgba(232,165,184,.1) 38%,transparent 72%); filter:blur(12px); opacity:0; }
+.butterfly-finale.active .hand-glow { animation:handGlow 2.2s ease-out .4s forwards; }
+.finale-butterfly { position:absolute; left:50%; top:-12%; width:clamp(70px,17vw,110px); height:auto; opacity:0; filter:drop-shadow(0 0 14px rgba(232,165,184,.55)); transform:translate(-50%,0) scale(.55) rotate(-8deg); }
+.butterfly-finale.active .finale-butterfly { animation:butterflyToHand 4.8s cubic-bezier(.22,.61,.36,1) .75s forwards; }
+.finale-butterfly .wing { transform-origin:50% 50%; animation:wingBeat .18s ease-in-out infinite alternate; }
+@keyframes wingBeat { from{transform:scaleX(.72)} to{transform:scaleX(1)} }
+@keyframes handReveal { 0%{opacity:0;transform:translateX(-50%) translateY(35px) scale(.92)} 100%{opacity:.92;transform:translateX(-50%) translateY(0) scale(1)} }
+@keyframes handGlow { 0%{opacity:0;transform:translateX(-50%) scale(.6)} 35%{opacity:1;transform:translateX(-50%) scale(1)} 100%{opacity:.55;transform:translateX(-50%) scale(1.08)} }
+@keyframes butterflyToHand {
+  0%{opacity:0;left:50%;top:-12%;transform:translate(-50%,0) scale(.45) rotate(-8deg)}
+  12%{opacity:1}
+  35%{left:22%;top:28%;transform:translate(-50%,0) scale(.7) rotate(12deg)}
+  58%{left:78%;top:47%;transform:translate(-50%,0) scale(.82) rotate(-10deg)}
+  78%{left:57%;top:67%;transform:translate(-50%,0) scale(.62) rotate(7deg)}
+  92%{left:50%;top:78%;transform:translate(-50%,0) scale(.58) rotate(0deg)}
+  100%{opacity:1;left:50%;top:78%;transform:translate(-50%,0) scale(.56) rotate(0deg)}
+}
+.butterfly-finale.active .finale-butterfly { animation-fill-mode:forwards; }
 
-    @media (max-width: 640px) {
-      .custom-cursor, .custom-cursor-dot { display:none; }
-      .butterfly { width:26px; height:26px; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .butterfly, .butterfly svg, .ambient-sparkle, .proposal-question, .btn-yes { animation:none !important; }
-      .section .screen-content, .timeline-item.motion-card, .promise-card.motion-card { transition:none !important; opacity:1; transform:none; filter:none; }
-    }
-
-  
-    /* Mobile performance: keep the romantic look without forcing the phone GPU to animate dozens of filters. */
-    @media (max-width: 600px) {
+@media (max-width: 600px) {
       #finale {
         min-height: 100svh;
         min-height: 100dvh;
@@ -1518,6 +1507,23 @@
     })();
   </script>
 
+<div class="butterfly-finale" id="butterflyFinale" aria-hidden="true">
+  <div class="hand-glow"></div>
+  <svg class="butterfly-hand" viewBox="0 0 260 190" aria-hidden="true">
+    <defs><linearGradient id="handGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fffaf6"/><stop offset=".55" stop-color="#e8a5b8"/><stop offset="1" stop-color="#f4d068"/></linearGradient></defs>
+    <path d="M72 177c-17-19-24-42-18-63 5-18 18-30 31-38 7-4 12-1 12 6l-2 25 6 2 10-61c1-8 7-12 13-10 5 2 7 7 6 13l-5 52 6 1 13-71c1-7 7-11 13-9 6 2 8 7 7 13l-9 69 6 2 16-55c2-7 8-10 14-7 5 2 7 7 5 13l-13 53 7 3 11-32c2-6 8-8 13-5 5 2 6 7 4 13-7 24-14 46-25 61-15 21-37 31-65 32H72Z" fill="url(#handGrad)" opacity=".9"/>
+    <path d="M96 105c19 11 39 16 62 14" fill="none" stroke="rgba(255,250,246,.55)" stroke-width="2" stroke-linecap="round"/>
+  </svg>
+  <svg class="finale-butterfly" viewBox="0 0 120 90" aria-hidden="true">
+    <g class="wing">
+      <path d="M58 42C42 11 10 4 14 27c2 13 17 22 38 19-16 12-12 35 2 31 11-3 14-17 8-31Z" fill="#e8a5b8" opacity=".9"/>
+      <path d="M62 42C78 11 110 4 106 27c-2 13-17 22-38 19 16 12 12 35-2 31-11-3-14-17-8-31Z" fill="#f4d068" opacity=".86"/>
+    </g>
+    <path d="M60 37v28" stroke="#fffaf6" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="60" cy="34" r="3" fill="#fffaf6"/>
+  </svg>
+</div>
+
   <script>
     (function () {
       'use strict';
@@ -1613,7 +1619,7 @@
         }, {passive:true});
       }
 
-      // Large multi-burst fireworks for the final YES moment.
+      // Oversized multi-burst fireworks for the final YES moment.
       window.__shaaluFireworks = function () {
         if (!fireworks) return;
 
@@ -1624,15 +1630,16 @@
         const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         const colors = ['#f4d068','#e8a5b8','#ff6f91','#fff4cf','#ffffff'];
 
-        // Full-screen celebration for ~8 seconds.
-        // Each wave is kept compact and old particles are removed quickly so phones stay smooth.
-        const burstsPerWave = reduced ? 2 : (mobile ? 4 : 7);
-        const sparksPerBurst = reduced ? 10 : (mobile ? 14 : 22);
-        const waveCount = reduced ? 1 : 5;
-        const waveGap = mobile ? 1350 : 1250;
+        // Bigger explosions with a bounded particle count for smooth phones.
+        const burstsPerWave = reduced ? 2 : (mobile ? 3 : 5);
+        const sparksPerBurst = reduced ? 10 : (mobile ? 16 : 24);
+        const waveCount = reduced ? 1 : 6;
+        const waveGap = mobile ? 1280 : 1180;
         const totalDuration = reduced ? 2800 : 8200;
+        const distanceMin = mobile ? 55 : 85;
+        const distanceRange = mobile ? 75 : 105;
 
-        const makeBurst = (cx, cy, delay, count, distanceMin, distanceRange) => {
+        const makeBurst = (cx, cy, delay) => {
           const flash = document.createElement('span');
           flash.className = 'firework-burst';
           flash.style.setProperty('--fx', cx + '%');
@@ -1640,64 +1647,58 @@
           flash.style.setProperty('--fd', delay + 's');
           fireworks.appendChild(flash);
 
-          for (let i = 0; i < count; i++) {
+          for (let i = 0; i < sparksPerBurst; i++) {
             const spark = document.createElement('span');
             spark.className = 'firework';
-            const angle = (Math.PI * 2 * i / count) + (Math.random() - .5) * .10;
+            const angle = (Math.PI * 2 * i / sparksPerBurst) + (Math.random() - .5) * .10;
             const distance = distanceMin + Math.random() * distanceRange;
-
             spark.style.setProperty('--fx', cx + '%');
             spark.style.setProperty('--fy', cy + '%');
             spark.style.setProperty('--dx', Math.cos(angle) * distance + 'px');
             spark.style.setProperty('--dy', Math.sin(angle) * distance + 'px');
             spark.style.setProperty('--fd', (delay + Math.random() * .08) + 's');
-            spark.style.setProperty('--ft', (mobile ? 1.55 : 1.8) + Math.random() * .45 + 's');
-            spark.style.setProperty('--fs', (mobile ? 2.2 : 2.8) + Math.random() * (mobile ? 2.8 : 3.5) + 'px');
+            spark.style.setProperty('--ft', (mobile ? 1.75 : 2.05) + Math.random() * .5 + 's');
+            spark.style.setProperty('--fs', (mobile ? 3 : 3.8) + Math.random() * (mobile ? 3 : 4.5) + 'px');
             spark.style.setProperty('--fc', colors[(Math.random() * colors.length) | 0]);
             fireworks.appendChild(spark);
           }
         };
 
-        const launchWave = (waveIndex) => {
+        const launchWave = () => {
           if (!fireworks.classList.contains('active')) return;
-
-          const wave = document.createDocumentFragment();
           const before = fireworks.childNodes.length;
 
-          // Spread bursts across the entire viewport — top, middle and bottom.
           for (let b = 0; b < burstsPerWave; b++) {
-            const cx = 5 + Math.random() * 90;
-            const cy = 6 + Math.random() * 82;
-            makeBurst(
-              cx,
-              cy,
-              Math.random() * .12,
-              sparksPerBurst,
-              mobile ? 28 : 38,
-              mobile ? 42 : 66
-            );
+            const cx = 8 + Math.random() * 84;
+            const cy = 7 + Math.random() * 76;
+            makeBurst(cx, cy, Math.random() * .12);
           }
 
-          // Remove this wave after its animation has finished, keeping DOM/GPU work bounded.
           const createdNodes = Array.from(fireworks.childNodes).slice(before);
-          setTimeout(() => {
-            createdNodes.forEach(node => node.remove());
-          }, mobile ? 2650 : 2900);
+          setTimeout(() => createdNodes.forEach(node => node.remove()), mobile ? 2850 : 3200);
         };
 
         if (reduced) {
-          launchWave(0);
+          launchWave();
         } else {
           for (let wave = 0; wave < waveCount; wave++) {
-            setTimeout(() => launchWave(wave), wave * waveGap);
+            setTimeout(launchWave, wave * waveGap);
           }
         }
 
-        // Keep the whole-screen finale visible for a full ~8 seconds.
         setTimeout(() => {
           fireworks.classList.remove('active');
           fireworks.innerHTML = '';
         }, totalDuration);
+
+        // Final visual: a large butterfly flies in and gently settles on the hand.
+        const finaleLayer = document.getElementById('butterflyFinale');
+        if (finaleLayer) {
+          finaleLayer.classList.remove('active');
+          void finaleLayer.offsetWidth;
+          setTimeout(() => finaleLayer.classList.add('active'), 7050);
+          setTimeout(() => finaleLayer.classList.remove('active'), 12500);
+        }
       };
 
       // The YES moment gets a burst of hearts/butterflies without changing the story text.
