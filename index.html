@@ -1361,7 +1361,7 @@
         bgm.volume = 0.32;
       }
       if (celebrate) celebrate.volume = 0.72;
-      if (celebrate2) celebrate2.volume = 0.72;
+      if (celebrate2) celebrate2.volume = 0.58;
 
       // Reveal the main experience. Nothing here is allowed to block the page.
       function enterExperience() {
@@ -1751,13 +1751,13 @@
         const colors = ['#f4d068','#e8a5b8','#ff6f91','#fff4cf','#ffffff'];
 
         // Bigger explosions with a bounded particle count for smooth phones.
-        const burstsPerWave = reduced ? 1 : (mobile ? 2 : 3);
-        const sparksPerBurst = reduced ? 8 : (mobile ? 12 : 16);
-        const waveCount = reduced ? 1 : 4;
-        const waveGap = mobile ? 1650 : 1700;
-        const totalDuration = reduced ? 2200 : 8000;
-        const distanceMin = mobile ? 48 : 62;
-        const distanceRange = mobile ? 58 : 78;
+        const burstsPerWave = reduced ? 1 : (mobile ? 3 : 4);
+        const sparksPerBurst = reduced ? 8 : (mobile ? 16 : 22);
+        const waveCount = reduced ? 1 : 6;
+        const waveGap = mobile ? 1700 : 1750;
+        const totalDuration = reduced ? 2200 : 10500;
+        const distanceMin = mobile ? 52 : 66;
+        const distanceRange = mobile ? 64 : 86;
 
         const makeBurst = (cx, cy, delay) => {
           const flash = document.createElement('span');
@@ -1795,7 +1795,7 @@
           }
 
           const createdNodes = Array.from(fireworks.childNodes).slice(before);
-          setTimeout(() => createdNodes.forEach(node => node.remove()), mobile ? 2850 : 3050);
+          setTimeout(() => createdNodes.forEach(node => node.remove()), mobile ? 3000 : 3300);
         };
 
         if (reduced) {
@@ -1817,7 +1817,7 @@
           finaleLayer.classList.remove('active');
           void finaleLayer.offsetWidth;
           setTimeout(() => finaleLayer.classList.add('active'), 120);
-          setTimeout(() => finaleLayer.classList.remove('active'), 7900);
+          setTimeout(() => finaleLayer.classList.remove('active'), 10400);
         }
       };
 
