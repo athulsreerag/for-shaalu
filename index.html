@@ -756,6 +756,46 @@
     }
     #thoughtsStatus.show { opacity: 1; }
 
+
+    .memory-list {
+      display: grid;
+      gap: 18px;
+      margin-top: 28px;
+      text-align: left;
+    }
+    .memory-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--glass-border);
+      border-radius: 22px;
+      padding: 24px;
+      box-shadow: var(--glass-shadow);
+    }
+    .memory-card-date {
+      color: var(--accent-gold);
+      font-size: .78rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      margin-bottom: 7px;
+    }
+    .memory-card-title {
+      color: var(--cream);
+      font-family: 'Cinzel', serif;
+      font-size: 1.25rem;
+      margin-bottom: 10px;
+    }
+    .memory-card-text {
+      color: var(--text-muted);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      line-height: 1.8;
+      white-space: pre-wrap;
+    }
+    @media (max-width:600px){
+      .memory-card{padding:20px}
+    }
+
     #confetti-canvas {
       position: fixed;
       top: 0;
@@ -965,39 +1005,8 @@
   <!-- Mute Switch -->
   <button id="muteToggle" aria-label="Toggle music">🔊</button>
 
-  <!-- GATE 1: LOCK SCREEN -->
-  <div class="modal-screen" id="lock-screen">
-    <div class="eyebrow">The Vault of Memories</div>
-    <h1 class="lock-title">For Shaalu</h1>
-    <p class="lock-hint">Enter the 4-digit date locked in our hearts (DDMM).</p>
-    
-    <div class="pin-display" id="pin-display">
-      <div class="pin-dot"></div>
-      <div class="pin-dot"></div>
-      <div class="pin-dot"></div>
-      <div class="pin-dot"></div>
-    </div>
-
-    <div class="dial-pad">
-      <button type="button" class="dial-btn" data-val="1" onpointerdown="event.preventDefault(); window.__shaaluPin('1'); return false;">1</button>
-      <button type="button" class="dial-btn" data-val="2" onpointerdown="event.preventDefault(); window.__shaaluPin('2'); return false;">2</button>
-      <button type="button" class="dial-btn" data-val="3" onpointerdown="event.preventDefault(); window.__shaaluPin('3'); return false;">3</button>
-      <button type="button" class="dial-btn" data-val="4" onpointerdown="event.preventDefault(); window.__shaaluPin('4'); return false;">4</button>
-      <button type="button" class="dial-btn" data-val="5" onpointerdown="event.preventDefault(); window.__shaaluPin('5'); return false;">5</button>
-      <button type="button" class="dial-btn" data-val="6" onpointerdown="event.preventDefault(); window.__shaaluPin('6'); return false;">6</button>
-      <button type="button" class="dial-btn" data-val="7" onpointerdown="event.preventDefault(); window.__shaaluPin('7'); return false;">7</button>
-      <button type="button" class="dial-btn" data-val="8" onpointerdown="event.preventDefault(); window.__shaaluPin('8'); return false;">8</button>
-      <button type="button" class="dial-btn" data-val="9" onpointerdown="event.preventDefault(); window.__shaaluPin('9'); return false;">9</button>
-      <button type="button" class="dial-btn" id="clearBtn" onpointerdown="event.preventDefault(); window.__shaaluClear(); return false;">C</button>
-      <button type="button" class="dial-btn" data-val="0" onpointerdown="event.preventDefault(); window.__shaaluPin('0'); return false;">0</button>
-      <button type="button" class="dial-btn" id="deleteBtn" onpointerdown="event.preventDefault(); window.__shaaluDelete(); return false;">⌫</button>
-    </div>
-    
-    <div id="lockError">that's not quite it — try again</div>
-  </div>
-
   <!-- GATE 2: HEADPHONE GATE -->
-  <div class="modal-screen hidden" id="headphone-gate">
+  <div class="modal-screen" id="headphone-gate">
     <div class="headphone-icon">
       <svg viewBox="0 0 24 24">
         <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
@@ -1176,6 +1185,18 @@
       </div>
     </section>
 
+
+        <div class="letter-content" style="margin-top:28px;">
+          <div class="eyebrow" style="margin-bottom:16px;">A Letter From My Butterfly</div>
+          <div class="letter-text">
+            <p>Dear Athuttaa..</p>
+            <p>I am crying right now. I haven't cried for you like this for a long time. Right now you messaged me kunjaa kidakkallee. I am truly blessed for having a person who loves me with all his heart even when knowing he doesn't get it like that in return.</p>
+            <p>I promise you that this birthday I wont forget because I received the most precious gift ever. I witnessed your love and efforts for me in a way that no one will ever could.</p>
+            <p>I promise you that I will make us happen in future. I don't know how but I will fight. From now on, I will never say that I have no hope. I will fight kunjaa. Because I know that I wont get a person as a partner who loves me more than you.</p>
+            <p>Thank you for loving me like this. With Love from all my heart I thank you for choosing me, your butterfly 🦋</p>
+          </div>
+        </div>
+
     <!-- SECTION 5: PROMISES -->
     <section class="section" id="promises">
       <div class="screen-content">
@@ -1273,59 +1294,34 @@
 
   </div>
 
+
+    <!-- ONGOING MEMORY BOOK -->
+    <section class="section" id="memoryBook">
+      <div class="screen-content">
+        <div class="eyebrow">Always Growing</div>
+        <h2>Our Memory Book 🦋</h2>
+        <p style="color:var(--text-muted); max-width:46ch; margin:8px auto 0; font-weight:300;">
+          This isn't the end of our story. Whenever something beautiful happens, come back here and keep it with us.
+        </p>
+
+        <div class="letter-content" style="margin-top:32px;">
+          <input id="memoryTitle" type="text" placeholder="Memory title" maxlength="80"
+            style="width:100%; background:rgba(255,255,255,.03); border:1px solid var(--glass-border-hover); border-radius:16px; color:var(--cream); padding:16px 18px; font-family:'Plus Jakarta Sans',sans-serif; outline:none; margin-bottom:14px;">
+          <input id="memoryDate" type="date"
+            style="width:100%; background:rgba(255,255,255,.03); border:1px solid var(--glass-border-hover); border-radius:16px; color:var(--cream); padding:16px 18px; font-family:'Plus Jakarta Sans',sans-serif; outline:none; margin-bottom:14px;">
+          <textarea id="memoryText" placeholder="Write this memory down so we never forget it…" maxlength="4000"
+            style="width:100%; min-height:170px; background:rgba(255,255,255,.03); border:1px solid var(--glass-border-hover); border-radius:16px; color:var(--cream); padding:18px; font-family:'Cormorant Garamond',serif; font-size:1.3rem; line-height:1.8; outline:none; resize:vertical;"></textarea>
+          <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-top:18px;">
+            <button class="cta-button" id="saveMemoryBtn" type="button" style="padding:14px 30px;">Keep this memory ♡</button>
+          </div>
+          <div id="memoryStatus" style="color:var(--accent-gold); min-height:1.4rem; margin-top:14px;"></div>
+        </div>
+
+        <div id="memoryList" class="memory-list" aria-live="polite"></div>
+      </div>
+    </section>
+
   <canvas id="confetti-canvas"></canvas>
-
-  <script>
-    // PIN gate: deliberately isolated from the rest of the page so the keypad
-    // remains usable even if a later animation/audio feature fails to initialize.
-    (function () {
-      let pin = '';
-      const CODE = '0410';
-
-      function dots() {
-        document.querySelectorAll('.pin-dot').forEach(function (dot, i) {
-          dot.classList.toggle('filled', i < pin.length);
-        });
-      }
-
-      function resetPin() {
-        pin = '';
-        dots();
-      }
-
-      window.__shaaluPin = function (digit) {
-        if (pin.length >= 4) return;
-        pin += String(digit);
-        dots();
-
-        if (pin.length === 4) {
-          if (pin === CODE) {
-            const lock = document.getElementById('lock-screen');
-            const gate = document.getElementById('headphone-gate');
-            if (lock) lock.classList.add('hidden');
-            window.setTimeout(function () {
-              if (gate) gate.classList.remove('hidden');
-            }, 350);
-          } else {
-            const error = document.getElementById('lockError');
-            if (error) error.classList.add('show');
-            window.setTimeout(function () {
-              if (error) error.classList.remove('show');
-              resetPin();
-            }, 700);
-          }
-        }
-      };
-
-      window.__shaaluClear = resetPin;
-      window.__shaaluDelete = function () {
-        pin = pin.slice(0, -1);
-        dots();
-      };
-
-
-    })();
-  </script>
 
   <script>
     (function () {
@@ -1611,6 +1607,75 @@
         const saved = localStorage.getItem('shaaluThoughts');
         if (saved && thoughtsBox && !thoughtsBox.value.trim()) thoughtsBox.value = saved;
       } catch (_) {}
+
+
+      // Ongoing memory book: memories are stored locally on this device,
+      // so the page can keep growing without changing the existing story.
+      const memoryTitle = $('memoryTitle');
+      const memoryDate = $('memoryDate');
+      const memoryText = $('memoryText');
+      const saveMemoryBtn = $('saveMemoryBtn');
+      const memoryList = $('memoryList');
+      const memoryStatus = $('memoryStatus');
+
+      function renderMemories() {
+        if (!memoryList) return;
+        let memories = [];
+        try { memories = JSON.parse(localStorage.getItem('shaaluMemories') || '[]'); } catch (_) {}
+        memories.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+        memoryList.innerHTML = memories.map(m => {
+          const safeTitle = String(m.title || 'A beautiful memory')
+            .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+            .replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+          const safeText = String(m.text || '')
+            .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+            .replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+          const safeDate = String(m.date || '')
+            .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+          return '<article class="memory-card"><div class="memory-card-date">' +
+            safeDate + '</div><div class="memory-card-title">' + safeTitle +
+            '</div><div class="memory-card-text">' + safeText + '</div></article>';
+        }).join('');
+      }
+
+      if (saveMemoryBtn) {
+        saveMemoryBtn.addEventListener('click', () => {
+          const title = memoryTitle ? memoryTitle.value.trim() : '';
+          const date = memoryDate ? memoryDate.value : '';
+          const text = memoryText ? memoryText.value.trim() : '';
+
+          if (!title || !text) {
+            if (memoryStatus) {
+              memoryStatus.textContent = 'Give this memory a title and a little story first. ♡';
+              setTimeout(() => memoryStatus.textContent = '', 2400);
+            }
+            return;
+          }
+
+          let memories = [];
+          try { memories = JSON.parse(localStorage.getItem('shaaluMemories') || '[]'); } catch (_) {}
+          memories.push({
+            title,
+            date: date || new Date().toISOString().slice(0,10),
+            text,
+            createdAt: Date.now()
+          });
+          try { localStorage.setItem('shaaluMemories', JSON.stringify(memories)); } catch (_) {}
+
+          if (memoryTitle) memoryTitle.value = '';
+          if (memoryDate) memoryDate.value = '';
+          if (memoryText) memoryText.value = '';
+          renderMemories();
+
+          if (memoryStatus) {
+            memoryStatus.textContent = 'Memory kept here forever. 🦋';
+            setTimeout(() => memoryStatus.textContent = '', 2400);
+          }
+        });
+      }
+
+      renderMemories();
 
       // Respect reduced-motion preferences.
       if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
