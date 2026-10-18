@@ -983,6 +983,23 @@
   .firefly{animation:none;opacity:.45}
 }
 </style>
+
+<!-- TEMPORARY SHAALU UPDATES STYLES: remove with the temporary update HTML/JS after 2 days. -->
+<style id="temporary-shaalu-updates-styles">
+  .temporary-shaalu-updates { margin: 0 auto 24px; text-align: center; }
+  .shaalu-updates-trigger { border: 1px solid rgba(244,208,104,.55); border-radius: 999px; padding: 11px 20px; color: var(--accent-gold); background: rgba(244,208,104,.08); font: inherit; font-size: .92rem; cursor: pointer; box-shadow: 0 0 24px rgba(244,208,104,.08); transition: transform .25s ease, background .25s ease; }
+  .shaalu-updates-trigger:hover { transform: translateY(-2px); background: rgba(244,208,104,.14); }
+  .shaalu-updates-panel { max-width: 520px; margin: 16px auto 0; padding: 22px; border: 1px solid rgba(232,165,184,.35); border-radius: 20px; background: rgba(15,12,25,.94); text-align: left; box-shadow: 0 18px 50px rgba(0,0,0,.35); }
+  .shaalu-updates-panel[hidden] { display: none; }
+  .shaalu-updates-intro { color: var(--accent-rose); margin-bottom: 12px; }
+  .shaalu-updates-panel ol { padding-left: 22px; color: var(--text-muted); }
+  .shaalu-updates-panel li { padding: 5px 0; }
+  .shaalu-updates-panel strong { color: var(--cream); }
+  .shaalu-updates-close { margin-top: 16px; border: 1px solid rgba(232,165,184,.4); border-radius: 999px; padding: 9px 15px; color: var(--cream); background: rgba(232,165,184,.1); font: inherit; cursor: pointer; }
+  @media (max-width: 520px) { .shaalu-updates-panel { padding: 17px; } }
+</style>
+<!-- END TEMPORARY SHAALU UPDATES STYLES -->
+
 </head>
 <body>
 <div class="firefly-layer" id="fireflies" aria-hidden="true"></div>
@@ -1036,6 +1053,20 @@
         <div style="margin: 0 auto 28px; padding: 10px 18px; border: 1px solid rgba(244,208,104,.28); border-radius: 999px; display: inline-block; color: var(--accent-gold); font-size: .78rem; letter-spacing: .22em; text-transform: uppercase; background: rgba(244,208,104,.04); box-shadow: 0 0 30px rgba(244,208,104,.08);">✨ A birthday gift from my heart ✨</div>
         <h1>Hey, My Love…</h1>
         <p>I crafted this timeless place just for you. Turn off the outside world for a moment and stay here with me.</p>
+        <!-- TEMPORARY SHAALU UPDATES: remove this HTML block and the matching CSS/JS blocks after 2 days. -->
+        <div class="temporary-shaalu-updates">
+          <button class="shaalu-updates-trigger" id="shaaluUpdatesTrigger" type="button" aria-expanded="false" aria-controls="shaaluUpdatesPanel">A little update for you 🦋</button>
+          <div class="shaalu-updates-panel" id="shaaluUpdatesPanel" hidden>
+            <p class="shaalu-updates-intro">You came back to see what’s new? Here are 3 little updates just for you. ❤️</p>
+            <ol>
+              <li><strong>A new memory:</strong> Calicut to Thalassery — our sleepy journey and dream cake.</li>
+              <li><strong>A new photo:</strong> the daily planner you made for me.</li>
+              <li><strong>Our Bangalore promise:</strong> two days together after your exams.</li>
+            </ol>
+            <button class="shaalu-updates-close" id="shaaluUpdatesClose" type="button">Back to our memories ♡</button>
+          </div>
+        </div>
+        <!-- END TEMPORARY SHAALU UPDATES -->
         <button class="cta-button" id="startBtn">Begin Journey ❤</button>
         <div class="scroll-indicator">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -1148,6 +1179,15 @@
               <div class="timeline-number">Chapter X</div>
               <h3 class="timeline-title">To My Butterfly, Shaalu</h3>
               <p class="timeline-desc">You came into my life quietly, but somehow, you became my favourite part of it. Years passed, memories changed, but somehow, my heart still finds its way back to you. Maybe that's what love is—finding the same person, again and again, in every version of your life. And if I get to choose one thing for all the chapters ahead, I choose you. My butterfly. 🦋</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-node"></div>
+            <div class="timeline-card">
+              <div class="timeline-number">Chapter XI</div>
+              <h3 class="timeline-title">Two Days in Bangalore</h3>
+              <p class="timeline-desc">After your exams, we’ll make that job-search and peace-making trip to Bangalore happen. The lovely cold weather, just us, and time together—I promise we’ll make those two days unforgettable. ❤️</p>
             </div>
           </div>
         </div>
@@ -1927,5 +1967,27 @@
   .butterfly svg{animation-duration:1.15s}
 }
 </style>
+
+<!-- TEMPORARY SHAALU UPDATES SCRIPT: remove with the temporary update HTML/CSS after 2 days. -->
+<script id="temporary-shaalu-updates-script">
+  (() => {
+    const trigger = document.getElementById('shaaluUpdatesTrigger');
+    const panel = document.getElementById('shaaluUpdatesPanel');
+    const close = document.getElementById('shaaluUpdatesClose');
+    if (!trigger || !panel || !close) return;
+    trigger.addEventListener('click', () => {
+      const open = panel.hidden;
+      panel.hidden = !open;
+      trigger.setAttribute('aria-expanded', String(open));
+      if (open) panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+    close.addEventListener('click', () => {
+      panel.hidden = true;
+      trigger.setAttribute('aria-expanded', 'false');
+    });
+  })();
+</script>
+<!-- END TEMPORARY SHAALU UPDATES SCRIPT -->
+
 </body>
 </html>
