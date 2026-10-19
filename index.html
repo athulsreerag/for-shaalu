@@ -990,7 +990,10 @@
   .shaalu-updates-trigger { display: inline-flex !important; align-items: center; justify-content: center; visibility: visible !important; opacity: 1 !important; position: relative; z-index: 51; min-height: 46px; border: 1px solid rgba(244,208,104,.55); border-radius: 999px; padding: 11px 20px; color: var(--accent-gold); background: rgba(244,208,104,.08); font: inherit; font-size: .92rem; cursor: pointer; box-shadow: 0 0 24px rgba(244,208,104,.08); transition: transform .25s ease, background .25s ease; }
   .shaalu-updates-trigger:hover { transform: translateY(-2px); background: rgba(244,208,104,.14); }
   .temporary-shaalu-updates { position: relative; z-index: 5; }
-  .shaalu-updates-trigger { animation: shaaluButterflyGlow 3s ease-in-out infinite; }
+  .shaalu-updates-trigger { animation: shaaluButterflyGlow 3s ease-in-out infinite; gap: 9px; position: relative; overflow: hidden; }
+  .shaalu-watch-face { display: inline-flex; align-items: center; justify-content: center; width: 25px; height: 25px; border: 1px solid currentColor; border-radius: 50%; font-size: 1rem; line-height: 1; box-shadow: inset 0 0 0 3px rgba(244,208,104,.08); }
+  .shaalu-watch-face::after { content: "🦋"; font-size: 13px; }
+  .shaalu-updates-note { max-width: 360px; margin: 0 auto 12px !important; color: var(--text-muted); font-size: .88rem; line-height: 1.65; }
   .shaalu-updates-panel { opacity: 1; transform: translateY(0); transition: opacity .55s ease, transform .55s ease; }
   @keyframes shaaluButterflyGlow { 0%,100% { box-shadow: 0 0 18px rgba(244,208,104,.08); } 50% { box-shadow: 0 0 28px rgba(232,165,184,.22); } }
   @media (prefers-reduced-motion: reduce) { .shaalu-updates-trigger, .shaalu-updates-panel { animation: none !important; transition: none !important; } }
@@ -1060,9 +1063,10 @@
         <p>I crafted this timeless place just for you. Turn off the outside world for a moment and stay here with me.</p>
         <!-- TEMPORARY SHAALU UPDATES: remove this HTML block and the matching CSS/JS blocks after 2 days. -->
         <div class="temporary-shaalu-updates">
-          <button class="shaalu-updates-trigger" id="shaaluUpdatesTrigger" type="button" aria-expanded="false" aria-controls="shaaluUpdatesPanel">A little note about what’s new ♡</button>
+          <p class="shaalu-updates-note">I know you came back to see what’s new, kunjaa. 🦋 Tap here, and I’ll take you on a little journey through the latest additions to our memories. ❤️</p>
+          <button class="shaalu-updates-trigger" id="shaaluUpdatesTrigger" type="button" aria-expanded="false" aria-controls="shaaluUpdatesPanel"><span class="shaalu-watch-face" aria-hidden="true"></span><span>Shaalu’s Memory Watch</span></button>
           <div class="shaalu-updates-panel" id="shaaluUpdatesPanel" hidden>
-            <p class="shaalu-updates-intro">You came back to see what’s new? Here are 3 little updates just for you. ❤️</p>
+            <p class="shaalu-updates-intro">You came back to see what’s new, didn’t you? Come, let me show you three little things I added just for us. ❤️</p>
             <ol>
               <li><strong>A new memory:</strong> Calicut to Thalassery — our sleepy journey and dream cake.</li>
               <li><strong>A new photo:</strong> the daily planner you made for me.</li>
