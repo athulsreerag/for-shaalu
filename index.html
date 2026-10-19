@@ -989,6 +989,11 @@
   .temporary-shaalu-updates { margin: 0 auto 24px; text-align: center; }
   .shaalu-updates-trigger { border: 1px solid rgba(244,208,104,.55); border-radius: 999px; padding: 11px 20px; color: var(--accent-gold); background: rgba(244,208,104,.08); font: inherit; font-size: .92rem; cursor: pointer; box-shadow: 0 0 24px rgba(244,208,104,.08); transition: transform .25s ease, background .25s ease; }
   .shaalu-updates-trigger:hover { transform: translateY(-2px); background: rgba(244,208,104,.14); }
+  .temporary-shaalu-updates { position: relative; z-index: 5; }
+  .shaalu-updates-trigger { animation: shaaluButterflyGlow 3s ease-in-out infinite; }
+  .shaalu-updates-panel { opacity: 1; transform: translateY(0); transition: opacity .55s ease, transform .55s ease; }
+  @keyframes shaaluButterflyGlow { 0%,100% { box-shadow: 0 0 18px rgba(244,208,104,.08); } 50% { box-shadow: 0 0 28px rgba(232,165,184,.22); } }
+  @media (prefers-reduced-motion: reduce) { .shaalu-updates-trigger, .shaalu-updates-panel { animation: none !important; transition: none !important; } }
   .shaalu-updates-panel { max-width: 520px; margin: 16px auto 0; padding: 22px; border: 1px solid rgba(232,165,184,.35); border-radius: 20px; background: rgba(15,12,25,.94); text-align: left; box-shadow: 0 18px 50px rgba(0,0,0,.35); }
   .shaalu-updates-panel[hidden] { display: none; }
   .shaalu-updates-intro { color: var(--accent-rose); margin-bottom: 12px; }
@@ -1977,15 +1982,42 @@
     const panel = document.getElementById('shaaluUpdatesPanel');
     const close = document.getElementById('shaaluUpdatesClose');
     if (!trigger || !panel || !close) return;
+    const prologue = document.getElementById('prologue');
+    const timeline = document.getElementById('timeline');
+    const gallery = document.getElementById('gallery');
+    const updates = document.querySelector('.temporary-shaalu-updates');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     trigger.addEventListener('click', () => {
-      const open = panel.hidden;
-      panel.hidden = !open;
-      trigger.setAttribute('aria-expanded', String(open));
-      if (open) panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      // Open the update card, then gently guide her through the three newest additions.
+      panel.hidden = false;
+      trigger.setAttribute('aria-expanded', 'true');
+      if (updates) updates.classList.add('shaalu-updates-open');
+      const scrollTo = (element, delay) => new Promise(resolve => {
+        if (!element) return resolve();
+        window.setTimeout(() => {
+          element.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+          window.setTimeout(resolve, reduceMotion ? 80 : 1050);
+        }, delay);
+      });
+      (async () => {
+        await scrollTo(panel, 0);
+        await scrollTo(timeline, 150);
+        // Chapter XI is the newest chapter at the end of the timeline.
+        const bangaloreChapter = Array.from(document.querySelectorAll('.timeline-item'))
+          .find(item => item.querySelector('.timeline-title')?.textContent.trim() === 'Two Days in Bangalore');
+        await scrollTo(bangaloreChapter, 120);
+        // Then show the photo gallery, where the new planner picture is included.
+        await scrollTo(gallery, 150);
+        // Return to the top so she can continue exploring from the beginning.
+        await scrollTo(prologue, 150);
+      })();
     });
     close.addEventListener('click', () => {
       panel.hidden = true;
       trigger.setAttribute('aria-expanded', 'false');
+      if (updates) updates.classList.remove('shaalu-updates-open');
+      if (prologue) prologue.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
     });
   })();
 </script>
