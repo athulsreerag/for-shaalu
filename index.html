@@ -1063,13 +1063,14 @@
         <p>I crafted this timeless place just for you. Turn off the outside world for a moment and stay here with me.</p>
         <!-- TEMPORARY SHAALU UPDATES: remove this HTML block and the matching CSS/JS blocks after 2 days. -->
         <div class="temporary-shaalu-updates">
-          <p class="shaalu-updates-note">I know you came back to see what’s new, kunjaa. 🦋 Tap here, and I’ll take you on a little journey through the latest additions to our memories. ❤️</p>
-          <button class="shaalu-updates-trigger" id="shaaluUpdatesTrigger" type="button" aria-expanded="false" aria-controls="shaaluUpdatesPanel"><span class="shaalu-watch-face" aria-hidden="true"></span><span>Shaalu’s Memory Watch</span></button>
+          <p class="shaalu-updates-note">I added a few new pieces to our story, kunjaa. 🦋 Come, let me show you the memories, promises, and little things I want you to keep close. ❤️</p>
+          <button class="shaalu-updates-trigger" id="shaaluUpdatesTrigger" type="button" aria-expanded="false" aria-controls="shaaluUpdatesPanel"><span class="shaalu-watch-face" aria-hidden="true"></span><span>New Chapters, Promises & Memories 🦋</span></button>
           <div class="shaalu-updates-panel" id="shaaluUpdatesPanel" hidden>
-            <p class="shaalu-updates-intro">You came back to see what’s new, didn’t you? Come, let me show you three little things I added just for us. ❤️</p>
+            <p class="shaalu-updates-intro">A little guided trip through our latest additions. I’ll take you to each one, give you time to read, and then bring you back here. ❤️</p>
             <ol>
-              <li><strong>A new memory:</strong> Calicut to Thalassery — our sleepy journey and dream cake.</li>
-              <li><strong>A new photo:</strong> the daily planner you made for me.</li>
+              <li><strong>A new memory:</strong> Calicut to Thalassery and back — our sleepy journey, the dream cake, and how quickly time flew with you.</li>
+              <li><strong>A new photo:</strong> the note you made for me. It’s in our photo gallery, waiting for you whenever you want to see it.</li>
+              <li><strong>A new note for you:</strong> everything I want you to know about our future together.</li>
               <li><strong>Our Bangalore promise:</strong> two days together after your exams.</li>
             </ol>
             <button class="shaalu-updates-close" id="shaaluUpdatesClose" type="button">Back to our memories ♡</button>
@@ -1167,8 +1168,8 @@
             <div class="timeline-node"></div>
             <div class="timeline-card">
               <div class="timeline-number">Chapter VIII</div>
-              <h3 class="timeline-title">Calicut to Thalassery</h3>
-              <p class="timeline-desc">The faster you wanted to sleep, the more I wanted to keep talking and spend time with you. I wanted to enjoy every single second with you, even when you were sleepy and the journey was coming to an end. Those little moments—trying to stretch our time together just a little longer—mean so much to me. Sometimes, all I wanted was a few more minutes with you. Even when you were sleepy, I still wanted to keep talking and spend more time with you, enjoying every single second by your side. And thank you for the dream cake, kunjaa. It was the best cake I’ve ever had. ❤️</p>
+              <h3 class="timeline-title">Calicut to Thalassery — and Back</h3>
+              <p class="timeline-desc">From Calicut to Thalassery and back to Calicut, it was our sleepy little journey, and somehow I still wanted time to slow down. The more you wanted to sleep, the more I wanted to keep talking and spend a few more minutes with you. Time has never run faster in my life than it did when I was with you. And the dream cake, kunjaa — honestly, the best cake I’ve ever had. ❤️</p>
             </div>
           </div>
 
@@ -1209,7 +1210,7 @@
         <div class="eyebrow">Frozen Moments</div>
         <h2>Us, in no particular order</h2>
         <div class="gallery-grid">
-          <div class="gallery-item"><img src="https://raw.githubusercontent.com/athulsreerag/for-shaalu/main/photos/IMG-20261017-WA0021.jpg" alt="Our daily planner memory" loading="lazy" decoding="async"></div>
+          <div class="gallery-item"><img src="https://raw.githubusercontent.com/athulsreerag/for-shaalu/main/photos/IMG-20261017-WA0021.jpg" alt="The note you made for me" loading="lazy" decoding="async"></div>
 
           <div class="gallery-item"><img src="https://raw.githubusercontent.com/athulsreerag/for-shaalu/main/photos/IMG_20241002_131928801_HDR.jpg" alt="Memory 1" loading="eager" decoding="async"></div>
           <div class="gallery-item"><img src="https://raw.githubusercontent.com/athulsreerag/for-shaalu/main/photos/IMG_20260126_102349623.jpg" alt="Memory 2" loading="lazy" decoding="async"></div>
@@ -1384,9 +1385,9 @@
     <section class="section" id="memoryBook">
       <div class="screen-content">
         <div class="eyebrow">Always Growing</div>
-        <h2>Our Memory Book 🦋</h2>
+        <h2>Add a Memory to Our Story 🦋</h2>
         <p style="color:var(--text-muted); max-width:46ch; margin:8px auto 0; font-weight:300;">
-          This isn't the end of our story. Whenever something beautiful happens, come back here and keep it with us.
+          Whenever something beautiful happens, add it here so you can revisit it. Memories saved here stay in this browser on this device; sharing them between both of your phones would need shared online storage.
         </p>
 
         <div class="letter-content" style="margin-top:32px;">
@@ -1397,7 +1398,7 @@
           <textarea id="memoryText" placeholder="Write this memory down so we never forget it…" maxlength="4000"
             style="width:100%; min-height:170px; background:rgba(255,255,255,.03); border:1px solid var(--glass-border-hover); border-radius:16px; color:var(--cream); padding:18px; font-family:'Cormorant Garamond',serif; font-size:1.3rem; line-height:1.8; outline:none; resize:vertical;"></textarea>
           <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-top:18px;">
-            <button class="cta-button" id="saveMemoryBtn" type="button" style="padding:14px 30px;">Keep this memory ♡</button>
+            <button class="cta-button" id="saveMemoryBtn" type="button" style="padding:14px 30px;">Add to Our Memory Book ♡</button>
           </div>
           <div id="memoryStatus" style="color:var(--accent-gold); min-height:1.4rem; margin-top:14px;"></div>
         </div>
@@ -1754,7 +1755,7 @@
           renderMemories();
 
           if (memoryStatus) {
-            memoryStatus.textContent = 'Memory kept here forever. 🦋';
+            memoryStatus.textContent = 'Added to your Memory Book on this device. 🦋';
             setTimeout(() => memoryStatus.textContent = '', 2400);
           }
         });
@@ -2012,37 +2013,62 @@
     const close = document.getElementById('shaaluUpdatesClose');
     if (!trigger || !panel || !close) return;
     const prologue = document.getElementById('prologue');
-    const timeline = document.getElementById('timeline');
-    const gallery = document.getElementById('gallery');
     const updates = document.querySelector('.temporary-shaalu-updates');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let tourRunning = false;
 
-    trigger.addEventListener('click', () => {
-      // Open the update card, then gently guide her through the three newest additions.
+    const findTimelineItem = (title) =>
+      Array.from(document.querySelectorAll('.timeline-item'))
+        .find(item => item.querySelector('.timeline-title')?.textContent.trim() === title);
+
+    // Scroll directly to the actual new content, then leave enough time to read it.
+    const visit = async (element) => {
+      if (!element) return;
+      element.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+      await new Promise(resolve => window.setTimeout(resolve, reduceMotion ? 100 : 1100));
+      const text = (element.innerText || element.textContent || '').trim();
+      const words = text.split(/\s+/).filter(Boolean).length;
+      const readingTime = Math.min(20000, Math.max(7000, Math.ceil(words / 220 * 60000)));
+      await new Promise(resolve => window.setTimeout(resolve, readingTime));
+    };
+
+    const finishAtStart = async () => {
+      panel.hidden = true;
+      trigger.setAttribute('aria-expanded', 'false');
+      if (updates) updates.classList.remove('shaalu-updates-open');
+      if (prologue) {
+        prologue.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+        await new Promise(resolve => window.setTimeout(resolve, reduceMotion ? 100 : 1100));
+      }
+      tourRunning = false;
+      trigger.disabled = false;
+    };
+
+    trigger.addEventListener('click', async () => {
+      if (tourRunning) return;
+      tourRunning = true;
+      trigger.disabled = true;
       panel.hidden = false;
       trigger.setAttribute('aria-expanded', 'true');
       if (updates) updates.classList.add('shaalu-updates-open');
-      const scrollTo = (element, delay) => new Promise(resolve => {
-        if (!element) return resolve();
-        window.setTimeout(() => {
-          element.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
-          window.setTimeout(resolve, reduceMotion ? 80 : 1050);
-        }, delay);
-      });
-      (async () => {
-        await scrollTo(panel, 0);
-        await scrollTo(timeline, 150);
-        // Chapter XI is the newest chapter at the end of the timeline.
-        const bangaloreChapter = Array.from(document.querySelectorAll('.timeline-item'))
-          .find(item => item.querySelector('.timeline-title')?.textContent.trim() === 'Two Days in Bangalore');
-        await scrollTo(bangaloreChapter, 120);
-        // Then show the photo gallery, where the new planner picture is included.
-        await scrollTo(gallery, 150);
-        // Return to the top so she can continue exploring from the beginning.
-        await scrollTo(prologue, 150);
-      })();
+
+      const memory = findTimelineItem('Calicut to Thalassery — and Back')
+        || findTimelineItem('Calicut to Thalassery');
+      const note = document.getElementById('future-with-you');
+      const promise = findTimelineItem('Two Days in Bangalore');
+
+      try {
+        // Skip the photo gallery in the automatic tour; it remains available to explore separately.
+        await visit(memory);
+        await visit(note);
+        await visit(promise);
+      } finally {
+        await finishAtStart();
+      }
     });
+
     close.addEventListener('click', () => {
+      if (tourRunning) return;
       panel.hidden = true;
       trigger.setAttribute('aria-expanded', 'false');
       if (updates) updates.classList.remove('shaalu-updates-open');
